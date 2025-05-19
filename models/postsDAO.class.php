@@ -2,7 +2,7 @@
     class postsDAO{
         public function __construct(private $db = null){}
 
-        public function BuscarTodosPosts($db){
+        public function BuscarTodosPosts(){
             $sql = "SELECT * FROM posts";
 
             try{
