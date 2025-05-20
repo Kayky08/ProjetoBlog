@@ -44,13 +44,14 @@
         }
 
         public function inserir($post){
-            $sql = "INSERT INTO posts (titulo,conteudo,datap) VALUES (?,?,?)";
+            $sql = "INSERT INTO posts (titulo,conteudo,datap,id_tags) VALUES (?,?,?,?)";
 
             try{
                 $stm = $this->db->prepare($sql);
                 $stm->bindValue(1,$post->getTitulo());
                 $stm->bindValue(2,$post->getConteudo());
                 $stm->bindValue(3,$post->getData());
+                $stm->bindValue(4,$post->getTags()->getID());
                 $stm->execute();
                 
                 $this->db = null;

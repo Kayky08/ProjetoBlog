@@ -10,6 +10,9 @@
             $postsDAO = new postsDAO($this->conexao);
             $retorno = $postsDAO->BuscarTodosPosts();
 
+            $tagsDAO = new tagsDAO($this->conexao);
+            $retorno2 = $tagsDAO->BuscarTodasTags();
+
             require_once "views/postsListar.php";
         }
 
@@ -32,11 +35,9 @@
                 }
 
                 if(!$erro){
-                    $tag = new Tags(descritivo:$_POST['tag']);
-                    $tagsDAO = new tagsDAO($this->conexao);
-                    $tagsDAO->inserir($tag);
+                    $tag = new Tags($_POST['tag']);
 
-                    $post = new Posts(titulo:$_POST['titulo'],conteudo:$_POST['conteudo'],tag:$tag->getID());
+                    $post = new Posts(titulo:$_POST['titulo'],conteudo:$_POST['conteudo'],tags:$tag);
                     $postsDAO = new postsDAO($this->conexao);
                     $postsDAO->inserir($post);
 

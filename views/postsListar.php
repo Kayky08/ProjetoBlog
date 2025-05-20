@@ -17,6 +17,10 @@
                 <p>{$dado->conteudo}</p>
             ";
         }
+
+        foreach($retorno2 as $dado){
+            echo"<p>ID: {$dado->id_tags} Tag: {$dado->descritivo}</p>";
+        }
     ?>
 
     <a href="/ProjetoBlog/inserir">Criar um Post</a>
