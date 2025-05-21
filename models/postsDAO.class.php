@@ -3,9 +3,7 @@
         public function __construct(private $db = null){}
 
         public function BuscarTodosPosts(){
-            $sql = "SELECT * FROM posts p
-                    INNER JOIN tags t
-                    ON p.id_tags = t.id_tags";
+            $sql = "SELECT * FROM posts p";
 
             try{
                 $stm = $this->db->prepare($sql);
@@ -44,18 +42,19 @@
         }
 
         public function inserir($post){
-            $sql = "INSERT INTO posts (titulo,conteudo,datap,id_tags) VALUES (?,?,?,?)";
+            $sql = "INSERT INTO posts (titulo,conteudo,datap) VALUES (?,?,?)";
 
             try{
                 $stm = $this->db->prepare($sql);
                 $stm->bindValue(1,$post->getTitulo());
                 $stm->bindValue(2,$post->getConteudo());
                 $stm->bindValue(3,$post->getData());
-                $stm->bindValue(4,$post->getTags()->getID());
                 $stm->execute();
                 
-                $this->db = null;
-                return "Post inserido com sucesso.";
+                $id = $this->db->lastInsertId();
+                $post->setID((int)$id);
+
+                return $post;
             }
             catch (PDOException $e){
                 echo $e->getCode();

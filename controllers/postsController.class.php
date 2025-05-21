@@ -1,4 +1,6 @@
-<?php 
+<?php
+    date_default_timezone_set("America/Sao_Paulo");
+
     class postsController{
         private $conexao;
 
@@ -35,14 +37,21 @@
                 }
 
                 if(!$erro){
-                    $tag = new Tags($_POST['tag']);
+                    $tagsInseridas=[];
+                    $tagsNomes = explode(',', $_POST['tags']);
 
-                    $post = new Posts(titulo:$_POST['titulo'],conteudo:$_POST['conteudo'],tags:$tag);
+                    $tagDAO= new tagsDAO($this->conexao);
+
+                    foreach($tagsNomes as $nomes){
+                        
+                    }
+
+                    $post = new Posts(titulo:$_POST['titulo'],conteudo:$_POST['conteudo'],datap: date("Y-m-d H:i:s"));
                     $postsDAO = new postsDAO($this->conexao);
-                    $postsDAO->inserir($post);
+                    $retorno = $postsDAO->inserir($post);
 
-                    // header("location:/ProjetoBlog/inserir");
-                    // die();
+                    //header("location:/ProjetoBlog/inserir");
+                    //die();
                 }
             }
             

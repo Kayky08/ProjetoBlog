@@ -2,7 +2,8 @@
     class Tags{
         public function __construct(
             private int $id_tags = 0,
-            private string $descritivo = ""
+            private string $descritivo = "",
+            private $post = null
         ){}
 
         public function getID(){

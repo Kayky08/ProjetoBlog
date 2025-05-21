@@ -4,8 +4,8 @@
             private int $id_posts = 0,
             private string $titulo = "",
             private string $conteudo = "",
-            private string $data = "",
-            private $tags = array()
+            private string $datap = "",
+            private array $tags = array()
         ){}
 
         public function getID(){
@@ -18,7 +18,7 @@
             return $this->conteudo;
         }
         public function getData(){
-            return $this->data;
+            return $this->datap;
         }
         public function getTags(){
             return $this->tags;
@@ -33,8 +33,8 @@
         public function setConteudo($conteudo){
             $this->conteudo = $conteudo;
         }
-        public function setData($data){
-            $this->data = $data;
+        public function setData($datap){
+            $this->datap = $datap;
         }
         public function setTag($tags){
             $this->tags[] = $tags;

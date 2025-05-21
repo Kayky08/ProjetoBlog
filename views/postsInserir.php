@@ -19,8 +19,8 @@
         <div><?php echo $msg[1]; ?></div>
         <br><br>
 
-        <label for="tag">Tag:</label>
-        <input type="text" id="tag" name="tag">
+        <label for="tags">Tag (separadas por virgula):</label>
+        <input type="text" id="tags" name="tags">
         <div><?php echo $msg[2]; ?></div>
         <br><br>
 

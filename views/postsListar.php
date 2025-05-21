@@ -11,15 +11,10 @@
     <?php 
         foreach($retorno as $dado){
             echo"<h2>{$dado->titulo}</h2>
-                <h4>{$dado->descritivo}</h4>
-                <h6>{$dado->datap}</h6>
+                 <h6>{$dado->datap}</h6>
                 
-                <p>{$dado->conteudo}</p>
+                 <p>{$dado->conteudo}</p>
             ";
-        }
-
-        foreach($retorno2 as $dado){
-            echo"<p>ID: {$dado->id_tags} Tag: {$dado->descritivo}</p>";
         }
     ?>
 

@@ -50,7 +50,8 @@
                     $stm->execute();
                     
                     $this->db = null;
-                    return "Tag inserida com sucesso.";
+
+                    return $tag;
                 }
                 catch (PDOException $e){
                     echo $e->getCode();
@@ -93,6 +94,26 @@
                     echo $e->getCode();
                     echo $e->getMessage();
                     echo "Probelma ao deletar a Tag.";
+                }
+            }
+
+            public function verificarNome($tag){
+                $sql = "SELECT * FROM tags WHERE descritivo = ?";
+
+                try{
+                    $stm = $this->db->prepare($sql);
+                    $stm->bindValue(1,$tag->getDescritivo);
+                    $stm->execute();
+                    
+                    $this->db = null;
+                    return $stm->fetchAll(PDO::FETCH_OBJ);
+                }
+                catch (PDOException $e){
+                    $this->db = null;
+
+                    echo $e->getCode();
+                    echo $e->getMessage();
+                    echo "Probelma ao verificar as Tags.";
                 }
             }
     }
