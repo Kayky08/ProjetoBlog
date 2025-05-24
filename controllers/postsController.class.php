@@ -12,8 +12,20 @@
             $postsDAO = new postsDAO($this->conexao);
             $retorno = $postsDAO->BuscarTodosPosts();
 
-            $tagsDAO = new tagsDAO($this->conexao);
-            $retorno2 = $tagsDAO->BuscarTodasTags();
+            foreach ($retorno as $linha) {
+                $id = $linha->id_posts;
+
+                if (!isset($postsAgrupados[$id])) {
+                    $postsAgrupados[$id] = [
+                        'titulo' => $linha->titulo,
+                        'datap' => $linha->datap,
+                        'conteudo' => $linha->conteudo,
+                        'tags' => []
+                    ];
+                }
+
+                $postsAgrupados[$id]['tags'][] = $linha->descritivo;
+            }
 
             require_once "views/postsListar.php";
         }
@@ -37,36 +49,34 @@
                 }
 
                 if(!$erro){
-                    $tagsInseridas=[];
-                    $tagsNomes = explode(',', $_POST['tags']);
-
-                    $tagDAO= new tagsDAO($this->conexao);
-
-                    foreach ($tagsNomes as $nomeTag){
-                        $nomeTag = trim($nomeTag);
-                        if ($nomeTag === '') continue;
-
-                        $tag = new Tags(descritivo: $nomeTag);
-                        $tag = $tagDAO->inserir($tag); 
-
-                        $tagsInseridas[] = $tag;
-                    }
-
                     $post = new Posts(titulo:$_POST['titulo'],conteudo:$_POST['conteudo'],datap: date("Y-m-d H:i:s"));
                     $postsDAO = new postsDAO($this->conexao);
                     $post = $postsDAO->inserir($post);
 
-                    $postsTagsDAO = new postsTagsDAO($this->conexao);
+                    $tagsInseridas=[];
+                    $tagsNomes = explode(',', $_POST['tags']);
                     
-                    foreach($tagsInseridas as $tag){
-                        $postsTagsDAO->relacinar($post,$tag);
+                    $tagDAO= new tagsDAO($this->conexao);
+                    
+                    foreach ($tagsNomes as $nomeTag){
+                        $nomeTag = trim($nomeTag);
+                        if ($nomeTag === '') continue;
+                        
+                        $tag = new Tags(descritivo: $nomeTag);
+                        $tag = $tagDAO->inserir($tag); 
+                        
+                        $tagsInseridas[] = $tag;
                     }
 
-                    var_dump($post);
+                    //var_dump($this->conexao); die();
+
+                    $postsTagsDAO = new postsTagsDAO($this->conexao);
+                    foreach($tagsInseridas as $tag){
+                        $postsTagsDAO->relacionar($post->getID(), $tag->getID());
+                    }
                     
-                    
-                    //header("location:/ProjetoBlog/inserir");
-                    //die();
+                    header("location:/ProjetoBlog/listar");
+                    die();
                 }
             }
             

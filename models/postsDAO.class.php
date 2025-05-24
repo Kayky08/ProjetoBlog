@@ -3,7 +3,11 @@
         public function __construct(private $db = null){}
 
         public function BuscarTodosPosts(){
-            $sql = "SELECT * FROM posts p";
+            $sql = "SELECT * FROM posts p
+                    INNER JOIN posts_tags pt
+                    ON p.id_posts = pt.id_posts
+                    INNER JOIN tags t
+                    ON t.id_tags = pt.id_tags";
 
             try{
                 $stm = $this->db->prepare($sql);

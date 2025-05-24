@@ -58,6 +58,7 @@
                     echo $e->getCode();
                     echo $e->getMessage();
                     echo "Probelma ao inserir a Tag.";
+                    return null;
                 }
             }
 
