@@ -49,7 +49,8 @@
                     $stm->bindValue(1,$tag->getDescritivo());
                     $stm->execute();
                     
-                    $this->db = null;
+                    $id = $this->db->lastInsertId();
+                    $tag->setID((int)$id);
 
                     return $tag;
                 }
@@ -102,7 +103,7 @@
 
                 try{
                     $stm = $this->db->prepare($sql);
-                    $stm->bindValue(1,$tag->getDescritivo);
+                    $stm->bindValue(1,$tag->getDescritivo());
                     $stm->execute();
                     
                     $this->db = null;

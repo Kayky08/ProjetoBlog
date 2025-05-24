@@ -8,7 +8,7 @@
             try{
                 $stm = $this->db->prepare($sql);
                 $stm->bindValue(1,$post->getID());
-                $stm->bindValue(1,$tag->getID());
+                $stm->bindValue(2,$tag->getID());
                 $stm->execute();
 
                 $this->db = null;
