@@ -29,10 +29,16 @@
 	$route->get("/", [inicioController::class,"inicio"]);
 	
 	//Posts
-	$route->get("/listar", [postsController::class,"listar"]);
-	$route->get("/inserir", [postsController::class,"inserir"]);
-	$route->post("/inserir", [postsController::class,"inserir"]);
-	$route->get("/alterar", [postsController::class,"alterar"]);
-	$route->post("/alterar", [postsController::class,"alterar"]);
-	$route->get("/deletar", [postsController::class,"deletar"]);
+	$route->get("/listarPosts", [postsController::class,"listar"]);
+	$route->get("/inserirPosts", [postsController::class,"inserir"]);
+	$route->post("/inserirPosts", [postsController::class,"inserir"]);
+	$route->get("/deletarPosts", [postsController::class,"deletar"]);
+
+	//Usuarios
+	$route->get("/listarUsuarios", [usuariosController::class,"listar"]);
+	$route->get("/inserirUsuarios", [usuariosController::class,"inserir"]);
+	$route->post("/inserirUsuarios", [usuariosController::class,"inserir"]);
+	$route->get("/alterarUsuarios", [usuariosController::class,"alterar"]);
+	$route->post("/alterarUsuarios", [usuariosController::class,"alterar"]);
+	$route->get("/deletarUsuarios", [usuariosController::class,"deletar"]);
 ?>

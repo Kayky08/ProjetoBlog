@@ -20,6 +20,7 @@
                         'titulo' => $linha->titulo,
                         'datap' => $linha->datap,
                         'conteudo' => $linha->conteudo,
+                        'usuario' => $linha->nome,
                         'tags' => []
                     ];
                 }

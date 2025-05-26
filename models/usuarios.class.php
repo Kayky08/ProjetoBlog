@@ -1,5 +1,5 @@
 <?php 
-    class Usuaios{
+    class Usuarios{
         public function __construct(
             private int $id_usuarios = 0,
             private string $nome = "",

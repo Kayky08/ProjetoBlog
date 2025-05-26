@@ -3,9 +3,7 @@
         public function __construct(private $db = null){}
 
         public function buscarTodosUsuarios(){
-            $sql = "SELECT * FROM usuarios u
-                    INNER JOIN posts p
-                    ON u.id_posts = p.id_posts";
+            $sql = "SELECT * FROM usuarios u";
 
             try{
                 $stm = $this->db->prepare($sql);
@@ -19,16 +17,16 @@
 
                 echo $e->getCode();
                 echo $e->getMessage();
-                echo "Probelma ao buscar todos os Posts.";
+                echo "Probelma ao buscar todos os Usuarios.";
             }
         }
 
-        public function BuscarUmPost($post){
-            $sql = "SELECT * FROM posts WHERE id_post = ?";
+        public function buscarUmUsuario($usuario){
+            $sql = "SELECT * FROM usuarios WHERE id_usuarios = ?";
 
             try{
                 $stm = $this->db->prepare($sql);
-                $stm->bindValue(1,$post->getID());
+                $stm->bindValue(1,$usuario->getID());
                 $stm->execute();
                 
                 $this->db = null;
@@ -39,67 +37,68 @@
 
                 echo $e->getCode();
                 echo $e->getMessage();
-                echo "Probelma ao buscar um Post.";
+                echo "Probelma ao buscar um Usuario.";
             }
         }
 
-        public function inserir($post){
-            $sql = "INSERT INTO posts (titulo,conteudo,datap) VALUES (?,?,?)";
+        public function inserir($usuario){
+            $sql = "INSERT INTO usuarios (nome,email,senha) VALUES (?,?,?)";
 
             try{
                 $stm = $this->db->prepare($sql);
-                $stm->bindValue(1,$post->getTitulo());
-                $stm->bindValue(2,$post->getConteudo());
-                $stm->bindValue(3,$post->getData());
+                $stm->bindValue(1,$usuario->getNome());
+                $stm->bindValue(2,$usuario->getEmail());
+                $stm->bindValue(3,$usuario->getSenha());
                 $stm->execute();
                 
                 $id = $this->db->lastInsertId();
-                $post->setID((int)$id);
+                $usuario->setID((int)$id);
 
-                return $post;
+                return $usuario;
             }
             catch (PDOException $e){
                 echo $e->getCode();
                 echo $e->getMessage();
-                echo "Probelma ao inserir o post.";
+                echo "Probelma ao inserir o Usuario.";
             }
         }
 
-        public function alterar($post){
-            $sql = "UPDATE posts SET titulo = ?, conteudo = ? WHERE id_post = ?";
+        public function alterar($usuario){
+            $sql = "UPDATE usuarios SET nome = ?, email = ?, senha = ? WHERE id_post = ?";
 
             try{
                 $stm = $this->db->prepare($sql);
-                $stm->bindValue(1,$post->getTitulo());
-                $stm->bindValue(2,$post->getConteudo());
-                $stm->bindValue(3,$post->getID());
+                $stm->bindValue(1,$usuario->getNome());
+                $stm->bindValue(2,$usuario->getEmail());
+                $stm->bindValue(3,$usuario->getSenha());
+                $stm->bindValue(4,$usuario->getID());
                 $stm->execute();
                 
                 $this->db = null;
-                return "Post alterado com sucesso.";
+                return "Usuario alterado com sucesso.";
             }
             catch (PDOException $e){
                 echo $e->getCode();
                 echo $e->getMessage();
-                echo "Probelma ao altera o Post.";
+                echo "Probelma ao alterar o Usuario.";
             }
         }
 
-        public function deletar($post){
-            $sql = "DELETE FROM posts WHERE id_post = ?";
+        public function deletar($usuario){
+            $sql = "DELETE FROM usuarios WHERE id_usuarios = ?";
 
             try{
                 $stm = $this->db->prepare($sql);
-                $stm->bindValue(1,$post->getID());
+                $stm->bindValue(1,$usuario->getID());
                 $stm->execute();
                 
                 $this->db = null;
-                return "Post deletado com sucesso.";
+                return "Usuario deletado com sucesso.";
             }
             catch (PDOException $e){
                 echo $e->getCode();
                 echo $e->getMessage();
-                echo "Probelma ao deletar o Post.";
+                echo "Probelma ao deletar o Usuario.";
             }
         }
     }

@@ -12,6 +12,7 @@
     foreach($postsAgrupados as $post){
         echo "
             <h2>{$post['titulo']}</h2>
+            <h4>{$post['usuario']}</h4>
             <h6>{$post['datap']}</h6>
             <p>{$post['conteudo']}</p>
         ";
@@ -20,6 +21,6 @@
     }
     ?>
 
-    <a href="/ProjetoBlog/inserir">Criar um Post</a>
+    <a href="/ProjetoBlog/inserirPosts">Criar um Post</a>
 </body>
 </html>

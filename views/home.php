@@ -7,7 +7,8 @@
 </head>
 <body>
     <ul>
-        <li><a href="/ProjetoBlog/listar">Posts</a></li>
+        <li><a href="/ProjetoBlog/listarPosts">Posts</a></li>
+        <li><a href="/ProjetoBlog/listarUsuarios">Usuarios</a></li>
     </ul>
 </body>
 </html>

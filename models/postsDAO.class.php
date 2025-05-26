@@ -7,7 +7,9 @@
                     INNER JOIN posts_tags pt
                     ON p.id_posts = pt.id_posts
                     INNER JOIN tags t
-                    ON t.id_tags = pt.id_tags";
+                    ON t.id_tags = pt.id_tags
+                    INNER JOIN usuarios u
+                    on u.id_usuarios = p.id_usuarios";
 
             try{
                 $stm = $this->db->prepare($sql);
