@@ -8,7 +8,10 @@
 <body>
     <h1>Cadastre um Usuario</h1>
 
-    <form action="#" method="post">
+    <a href="/ProjetoBlog/listarUsuarios">Voltar</a>
+    <br><br>
+
+    <form action="" method="post">
         <input type="hidden" id="id" name="id" value="<?php echo $retorno[0]->id_usuarios;?>">
 
         <label for="nome">Nome:</label>

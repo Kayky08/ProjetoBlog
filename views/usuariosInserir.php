@@ -8,7 +8,11 @@
 <body>
     <h1>Cadastre um Usuario</h1>
 
+    <a href="/ProjetoBlog/listarUsuarios">Voltar</a>
+    <br><br>
+
     <form action="#" method="post">
+        
         <label for="nome">Nome:</label>
         <input type="text" id="nome" name="nome">
         <div><?php echo $msg[0]; ?></div>
@@ -28,6 +32,8 @@
         <input type="password" id="vsenha" name="vsenha">
         <div><?php echo $msg[3]; ?></div>
         <br><br>
+
+        <input type="hidden" id="tipo" name="tipo" value="comum">
 
         <input type="submit" value="Postar">
     </form>

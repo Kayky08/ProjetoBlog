@@ -41,4 +41,6 @@
 	$route->get("/alterarUsuarios", [usuariosController::class,"alterar"]);
 	$route->post("/alterarUsuarios", [usuariosController::class,"alterar"]);
 	$route->get("/deletarUsuarios", [usuariosController::class,"deletar"]);
+	$route->get("/loginUsuarios", [usuariosController::class,"login"]);
+	$route->post("/loginUsuarios", [usuariosController::class,"login"]);
 ?>

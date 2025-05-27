@@ -8,11 +8,15 @@
 <body>
     <h1>Lista de Usuarios</h1>
 
+    <a href="/ProjetoBlog/">Voltar</a>
+    <br><br>
+
     <table border="1px">
         <thead>
             <tr>
                 <th>Codigo</th>
                 <th>Nome</th>
+                <th>Tipo</th>
                 <th>Email</th>
                 <th>Senha</th>
                 <th colspan="2">Ações</th>
@@ -26,6 +30,7 @@
                     <tr>
                         <td>{$dado->id_usuarios}</td>
                         <td>{$dado->nome}</td>
+                        <td>{$dado->tipo}</td>
                         <td>{$dado->email}</td>
                         <td>{$dado->senha}</td>
                         <td><a href='/ProjetoBlog/alterarUsuarios?id={$dado->id_usuarios}'>Alterar</a></td>

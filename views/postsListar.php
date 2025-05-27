@@ -8,6 +8,9 @@
 <body>
     <h1>Lista de Posts</h1>
 
+    <a href="/ProjetoBlog/">Voltar</a>
+    <br><br>
+
     <?php 
     foreach($postsAgrupados as $post){
         echo "

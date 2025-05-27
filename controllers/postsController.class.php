@@ -69,8 +69,6 @@
                         $tagsInseridas[] = $tag;
                     }
 
-                    //var_dump($this->conexao); die();
-
                     $postsTagsDAO = new postsTagsDAO($this->conexao);
                     foreach($tagsInseridas as $tag){
                         $postsTagsDAO->relacionar($post->getID(), $tag->getID());

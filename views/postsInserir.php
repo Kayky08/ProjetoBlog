@@ -8,6 +8,9 @@
 <body>
     <h1>Crie um Post</h1>
 
+    <a href="/ProjetoBlog/listarPosts">Voltar</a>
+    <br><br>
+
     <form action="#" method="post">
         <label for="titulo">Titulo:</label>
         <input type="text" id="titulo" name="titulo">
