@@ -48,13 +48,14 @@
         }
 
         public function inserir($post){
-            $sql = "INSERT INTO posts (titulo,conteudo,datap) VALUES (?,?,?)";
+            $sql = "INSERT INTO posts (titulo,conteudo,datap,id_usuarios) VALUES (?,?,?,?)";
 
             try{
                 $stm = $this->db->prepare($sql);
                 $stm->bindValue(1,$post->getTitulo());
                 $stm->bindValue(2,$post->getConteudo());
                 $stm->bindValue(3,$post->getData());
+                $stm->bindValue(4,$post->getUsuario()->getID());
                 $stm->execute();
                 
                 $id = $this->db->lastInsertId();
@@ -90,7 +91,7 @@
         }
 
         public function deletar($post){
-            $sql = "DELETE FROM posts WHERE id_post = ?";
+            $sql = "DELETE FROM posts WHERE id_posts = ?";
 
             try{
                 $stm = $this->db->prepare($sql);

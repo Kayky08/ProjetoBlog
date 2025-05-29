@@ -17,6 +17,7 @@
 
                 if (!isset($postsAgrupados[$id])) {
                     $postsAgrupados[$id] = [
+                        'id' => $linha->id_posts,
                         'titulo' => $linha->titulo,
                         'datap' => $linha->datap,
                         'conteudo' => $linha->conteudo,
@@ -35,6 +36,8 @@
             $msg = ["","",""];
             $erro = false;
 
+            if(!isset($_SESSION)) session_start();
+
             if($_POST){
                 if(empty($_POST['titulo'])){
                     $erro = true;
@@ -50,7 +53,13 @@
                 }
 
                 if(!$erro){
-                    $post = new Posts(titulo:$_POST['titulo'],conteudo:$_POST['conteudo'],datap: date("Y-m-d H:i:s"));
+                    $usuario = new Usuarios(id_usuarios: $_SESSION['id_usuarios']);
+                    $usuariosDAO = new usuariosDAO($this->conexao);
+                    $retorno = $usuariosDAO->buscarUmUsuario($usuario);
+
+                    var_dump($retorno[0]->id_usuarios);
+                    
+                    $post = new Posts(titulo:$_POST['titulo'],conteudo:$_POST['conteudo'],datap: date("Y-m-d H:i:s"),usuario:$usuario);
                     $postsDAO = new postsDAO($this->conexao);
                     $post = $postsDAO->inserir($post);
 
@@ -74,12 +83,23 @@
                         $postsTagsDAO->relacionar($post->getID(), $tag->getID());
                     }
                     
-                    header("location:/ProjetoBlog/listar");
+                    header("location:/ProjetoBlog/listarPosts");
                     die();
                 }
             }
             
             require_once "views/postsInserir.php";
+        }
+
+        public function deletar(){
+            if(isset($_GET)){
+                $post = new Posts(id_posts:$_GET['id']);
+                $postDAO = new postsDAO($this->conexao);
+                $postDAO->deletar($post);
+
+                //header("location:/ProjetoBlog/");
+                //die();
+            }
         }
     }
 ?>

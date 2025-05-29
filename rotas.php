@@ -26,10 +26,10 @@
 	$route = new Rotas();
 
     //Inicio
-	$route->get("/", [inicioController::class,"inicio"]);
+	//$route->get("/", [inicioController::class,"inicio"]);
 	
 	//Posts
-	$route->get("/listarPosts", [postsController::class,"listar"]);
+	$route->get("/", [postsController::class,"listar"]);
 	$route->get("/inserirPosts", [postsController::class,"inserir"]);
 	$route->post("/inserirPosts", [postsController::class,"inserir"]);
 	$route->get("/deletarPosts", [postsController::class,"deletar"]);
@@ -41,6 +41,8 @@
 	$route->get("/alterarUsuarios", [usuariosController::class,"alterar"]);
 	$route->post("/alterarUsuarios", [usuariosController::class,"alterar"]);
 	$route->get("/deletarUsuarios", [usuariosController::class,"deletar"]);
-	$route->get("/loginUsuarios", [usuariosController::class,"login"]);
-	$route->post("/loginUsuarios", [usuariosController::class,"login"]);
+	//Login/Logout
+	$route->get("/login", [usuariosController::class,"login"]);
+	$route->post("/login", [usuariosController::class,"login"]);
+	$route->get("/logout", [usuariosController::class,"logout"]);
 ?>

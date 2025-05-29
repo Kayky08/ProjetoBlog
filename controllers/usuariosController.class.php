@@ -6,43 +6,6 @@
             $this->conexao = Conexao::getInstancia();
         }
 
-        public function login(){
-            $msg = ["","",""];
-
-            if($_POST){
-                $erro = false;
-
-                if(empty($_POST['email'])){
-                    $erro = true;
-                    $msg[0] = "Preencha a parte de e-mail.";
-                }
-                if(empty($_POST['senha'])){
-                    $erro = true;
-                    $msg[1] = "Preencha a parte de senha.";
-                }
-
-                if(!$erro){
-                    $usuario = new Usuarios(email:$_POST['email'], senha:md5($_POST['senha']));
-                    
-                    $usuarioDAO = new usuariosDAO($this->conexao);
-                    $retorno = $usuarioDAO->verificarUsuario($usuario);
-
-                    if(count($retorno) > 0){
-                        session_start();
-                        $_SESSION['id_usuarios'] = $retorno[0]->id_usuarios;
-                        $_SESSION['tipo'] = $retorno[0]->tipo;
-
-                        header("location:index.php");
-                    }
-                    else{
-                        $msg[2] = "Confira seu E-mail/Senha."; 
-                    }
-                }
-            }
-
-            require_once "views/usuariosLogin.php";
-        }
-
         public function listar(){
             $usuarioDAO = new usuariosDAO($this->conexao);
             $retorno = $usuarioDAO->buscarTodosUsuarios();
@@ -54,7 +17,7 @@
         public function inserir(){
             $msg = ["","","",""];
             $erro = false;
-            
+
             if($_POST){
                 if(empty($_POST['nome'])){
                     $erro = true;
@@ -137,6 +100,77 @@
                 header("location:/ProjetoBlog/listarUsuarios");
                 die();
             }
+        }
+
+        public function login(){
+            $msg = ["","",""];
+
+            if($_POST){
+                $erro = false;
+
+                if(empty($_POST['email'])){
+                    $erro = true;
+                    $msg[0] = "Preencha a parte de e-mail.";
+                }
+                if(empty($_POST['senha'])){
+                    $erro = true;
+                    $msg[1] = "Preencha a parte de senha.";
+                }
+
+                if(!$erro){
+                    if($_POST['email'] == "admin@admin.com" && $_POST['senha'] == "admin"){
+                        $usuario = new Usuarios(email:$_POST['email'], senha:$_POST['senha']);
+                    
+                        $usuarioDAO = new usuariosDAO($this->conexao);
+                        $retorno = $usuarioDAO->verificarUsuario($usuario);                   
+
+                        if(!empty($retorno)){
+                            session_start();
+                            $_SESSION['id_usuarios'] = $retorno[0]->id_usuarios;
+                            $_SESSION['tipo'] = $retorno[0]->tipo;
+                            $_SESSION['nome'] = $retorno[0]->nome;
+                            $_SESSION['email'] = $retorno[0]->email;
+
+
+                            header("location:/ProjetoBlog/");
+                            die();
+                        }
+                        else{
+                            $msg[2] = "Confira seu E-mail/Senha."; 
+                        }
+                    }
+
+                    $usuario = new Usuarios(email:$_POST['email'], senha:md5($_POST['senha']));
+                    
+                    $usuarioDAO = new usuariosDAO($this->conexao);
+                    $retorno = $usuarioDAO->verificarUsuario($usuario);                   
+
+                    if(!empty($retorno)){
+                        session_start();
+                        $_SESSION['id_usuarios'] = $retorno[0]->id_usuarios;
+                        $_SESSION['tipo'] = $retorno[0]->tipo;
+                        $_SESSION['nome'] = $retorno[0]->nome;
+                        $_SESSION['email'] = $retorno[0]->email;
+
+
+                        header("location:/ProjetoBlog/");
+                        die();
+                    }
+                    else{
+                        $msg[2] = "Confira seu E-mail/Senha."; 
+                    }
+                }
+            }
+
+            require_once "views/usuariosLogin.php";
+        }
+
+        public function logout(){
+            session_start();
+			$_SESSION = array();
+			session_destroy();
+
+			header("location:/ProjetoBlog/");
         }
     }
 ?>

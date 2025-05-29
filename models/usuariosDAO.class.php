@@ -32,7 +32,7 @@
                 $stm->bindValue(1,$usuario->getID());
                 $stm->execute();
                 
-                $this->db = null;
+                $id = $this->db->lastInsertID();
                 return $stm->fetchAll(PDO::FETCH_OBJ);
             }
             catch (PDOException $e){
@@ -110,7 +110,7 @@
         }
 
         public function verificarUsuario($usuario){
-            $sql = "SELECT id_usuarios, tipo
+            $sql = "SELECT *
                     FROM usuarios
                     WHERE email = ? AND senha = ?";
 

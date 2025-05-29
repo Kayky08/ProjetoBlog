@@ -5,7 +5,8 @@
             private string $titulo = "",
             private string $conteudo = "",
             private string $datap = "",
-            private array $tags = array()
+            private array $tags = array(),
+            private $usuario = null
         ){}
 
         public function getID(){
@@ -23,6 +24,9 @@
         public function getTags(){
             return $this->tags;
         }
+        public function getUsuario(){
+            return $this->usuario;
+        }
 
         public function setID($id_posts){
             $this->id_posts = $id_posts;
@@ -38,6 +42,9 @@
         }
         public function setTag($tags){
             $this->tags[] = $tags;
+        }
+        public function setUsuario($usuario){
+            $this->usuario = $usuario;
         }
     }
 ?>
