@@ -80,10 +80,10 @@
 
                     $postsTagsDAO = new postsTagsDAO($this->conexao);
                     foreach($tagsInseridas as $tag){
-                        $postsTagsDAO->relacionar($post->getID(), $tag->getID());
+                        $postsTagsDAO->relacionar($post, $tag);
                     }
                     
-                    header("location:/ProjetoBlog/listarPosts");
+                    header("location:/ProjetoBlog/");
                     die();
                 }
             }
@@ -94,11 +94,20 @@
         public function deletar(){
             if(isset($_GET)){
                 $post = new Posts(id_posts:$_GET['id']);
+
+                $postsTagsDAO = new postsTagsDAO($this->conexao);
+                $relacoes = $postsTagsDAO->buscarPorPost($post);
+
+                foreach($relacoes as $relacao){
+                    $postsTags = new postsTags(id_posts_tags: $relacao->id_posts_tags);
+                    $postsTagsDAO->deletar($postsTags);
+                }
+
                 $postDAO = new postsDAO($this->conexao);
                 $postDAO->deletar($post);
 
-                //header("location:/ProjetoBlog/");
-                //die();
+                header("location:/ProjetoBlog/");
+                die();
             }
         }
     }
