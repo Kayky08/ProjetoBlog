@@ -22,6 +22,7 @@
                         'datap' => $linha->datap,
                         'conteudo' => $linha->conteudo,
                         'usuario' => $linha->nome,
+                        'categoria' => $linha->cdescritivo,
                         'tags' => []
                     ];
                 }
@@ -33,6 +34,12 @@
         }
 
         public function inserir(){
+            if(!isset($_SESSION)) session_start();
+
+
+            $categoriasDAO = new categoriasDAO($this->conexao);
+            $categorias = $categoriasDAO->BuscarTodasCategorias();
+
             $msg = ["","",""];
             $erro = false;
 
@@ -54,14 +61,16 @@
 
                 if(!$erro){
                     $usuario = new Usuarios(id_usuarios: $_SESSION['id_usuarios']);
-                    $usuariosDAO = new usuariosDAO($this->conexao);
-                    $retorno = $usuariosDAO->buscarUmUsuario($usuario);
-
-                    var_dump($retorno[0]->id_usuarios);
+                    $categoria = new Categorias(id_categorias: $_POST['categoria']);
                     
-                    $post = new Posts(titulo:$_POST['titulo'],conteudo:$_POST['conteudo'],datap: date("Y-m-d H:i:s"),usuario:$usuario);
+                    var_dump($categoria->getID());
+
+                    $post = new Posts(titulo:$_POST['titulo'],conteudo:$_POST['conteudo'],datap: date("Y-m-d H:i:s"),usuario:$usuario,categoria:$categoria);
+
+                    var_dump($post->getUsuario()->getID());
                     $postsDAO = new postsDAO($this->conexao);
                     $post = $postsDAO->inserir($post);
+
 
                     $tagsInseridas=[];
                     $tagsNomes = explode(',', $_POST['tags']);

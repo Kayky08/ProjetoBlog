@@ -42,6 +42,7 @@
                         ";
                         
                         echo "<p><strong>Tags:</strong> " . implode(', ', $post['tags']) . "</p>";
+                        echo "<p><strong>Categoria:</strong>{$post['categoria']}</p>";
                     }
                 break;
 
@@ -65,6 +66,7 @@
                         ";
                         
                         echo "<p><strong>Tags:</strong> " . implode(', ', $post['tags']) . "</p>";
+                        echo "<p><strong>Categoria:</strong>{$post['categoria']}</p>";
                     }
                 break;
             }
@@ -81,6 +83,7 @@
                 ";
                 
                 echo "<p><strong>Tags:</strong> " . implode(', ', $post['tags']) . "</p>";
+                echo "<p><strong>Categoria:</strong>{$post['categoria']}</p>";
             }
         }
     ?>

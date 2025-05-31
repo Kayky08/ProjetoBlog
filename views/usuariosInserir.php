@@ -8,9 +8,6 @@
 <body>
     <h1>Cadastre um Usuario</h1>
 
-    <a href="/ProjetoBlog/listarUsuarios">Voltar</a>
-    <br><br>
-
     <form action="#" method="post">
         
         <label for="nome">Nome:</label>
@@ -37,5 +34,6 @@
 
         <input type="submit" value="Postar">
     </form>
+
 </body>
 </html>

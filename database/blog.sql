@@ -1,9 +1,9 @@
 CREATE TABLE IF NOT EXISTS categorias(
   id_categorias INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  descritivo VARCHAR(50) NOT NULL
+  cdescritivo VARCHAR(50) NOT NULL
 );
 
-INSERT INTO categorias (descritivo)
+INSERT INTO categorias (cdescritivo)
 VALUES
 ("Tecnologia"),
 ("Games"),
@@ -18,24 +18,21 @@ VALUES
 
 CREATE TABLE IF NOT EXISTS tags(
   id_tags INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  descritivo VARCHAR(50) NOT NULL,
-  id_categorias INT NOT NULL,
-
-  FOREIGN KEY (id_categorias) REFERENCES categorias (id_categorias)
+  descritivo VARCHAR(50) NOT NULL
 );
 
 INSERT INTO tags (descritivo)
 VALUES
-("Linguagens de Programação",1),
-("Novos jogos de 2025",2),
-("Psicologia",3),
-("Estação Outono/Inverno",4),
-("Receitas de Doces",5),
-("Lista de Standups",6),
-("Viagens",7),
-("Politica Atual",8),
-("Roberto Carlos",9),
-("Marvel",10);
+("Linguagens de Programação"),
+("Novos jogos de 2025"),
+("Psicologia"),
+("Estação Outono/Inverno"),
+("Receitas de Doces"),
+("Lista de Standups"),
+("Viagens"),
+("Politica Atual"),
+("Roberto Carlos"),
+("Marvel");
 
 CREATE TABLE IF NOT EXISTS usuarios (
   id_usuarios INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -56,14 +53,16 @@ CREATE TABLE IF NOT EXISTS posts (
   conteudo VARCHAR(1000) NOT NULL,
   datap DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   id_usuarios INT NOT NULL,
+  id_categorias INT NOT NULL,
 
+  FOREIGN KEY (id_categorias) REFERENCES categorias (id_categorias),
   FOREIGN KEY (id_usuarios) REFERENCES usuarios (id_usuarios)
 );
 
-INSERT INTO posts (titulo, conteudo, datap, id_usuarios) 
+INSERT INTO posts (titulo, conteudo, datap, id_usuarios, id_categorias) 
 VALUES
-('Primeiro Post', 'Primeiro Post', '2025-05-18', 1),
-('Segundo Post', 'Segundo Post', '2025-05-18', 1);
+('Primeiro Post', 'Primeiro Post', '2025-05-18', 1, 1),
+('Segundo Post', 'Segundo Post', '2025-05-18', 1, 2);
 
 CREATE TABLE IF NOT EXISTS posts_tags(
   id_posts_tags INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -82,7 +81,7 @@ VALUES
 (2,3);
 
 /*
-1. A Evolução das Linguagens de Programação no Século XXI
+1. 
 As linguagens de programação estão passando por uma grande transformação, com a ascensão de opções modernas como Rust, Kotlin e Elixir. Enquanto linguagens clássicas como Java e C ainda dominam setores importantes, a busca por segurança, desempenho e legibilidade está moldando o futuro do desenvolvimento. Python e JavaScript seguem populares, mas o interesse por alternativas mais específicas cresce. Linguagens como Zig e Crystal ganham espaço por oferecerem controle com simplicidade. A concorrência incentiva melhorias constantes, com foco em programação paralela e eficiente. Aprender novas linguagens deixou de ser diferencial: tornou-se uma necessidade. O futuro será moldado por quem conseguir acompanhar essa evolução.
 Tags: Linguagens de Programação
 

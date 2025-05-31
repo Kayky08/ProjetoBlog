@@ -9,7 +9,10 @@
                     INNER JOIN tags t
                     ON t.id_tags = pt.id_tags
                     INNER JOIN usuarios u
-                    on u.id_usuarios = p.id_usuarios";
+                    on u.id_usuarios = p.id_usuarios
+                    INNER JOIN categorias c
+                    on c.id_categorias = c.id_categorias
+                    GROUP BY p.id_posts";
 
             try{
                 $stm = $this->db->prepare($sql);
@@ -28,7 +31,16 @@
         }
 
         public function BuscarUmPost($post){
-            $sql = "SELECT * FROM posts WHERE id_post = ?";
+            $sql = "SELECT * FROM posts p
+                    INNER JOIN posts_tags pt
+                    ON p.id_posts = pt.id_posts
+                    INNER JOIN tags t
+                    ON t.id_tags = pt.id_tags
+                    INNER JOIN usuarios u
+                    on u.id_usuarios = p.id_usuarios
+                    INNER JOIN categorias c
+                    on c.id_categorias = c.id_categorias
+                    WHERE id_post = ?";
 
             try{
                 $stm = $this->db->prepare($sql);
@@ -48,7 +60,7 @@
         }
 
         public function inserir($post){
-            $sql = "INSERT INTO posts (titulo,conteudo,datap,id_usuarios) VALUES (?,?,?,?)";
+            $sql = "INSERT INTO posts (titulo,conteudo,datap,id_usuarios,id_categorias) VALUES (?,?,?,?,?)";
 
             try{
                 $stm = $this->db->prepare($sql);
@@ -56,6 +68,7 @@
                 $stm->bindValue(2,$post->getConteudo());
                 $stm->bindValue(3,$post->getData());
                 $stm->bindValue(4,$post->getUsuario()->getID());
+                $stm->bindValue(5,$post->getCategoria()->getID());
                 $stm->execute();
                 
                 $id = $this->db->lastInsertId();
@@ -67,26 +80,6 @@
                 echo $e->getCode();
                 echo $e->getMessage();
                 echo "Probelma ao inserir o post.";
-            }
-        }
-
-        public function alterar($post){
-            $sql = "UPDATE posts SET titulo = ?, conteudo = ? WHERE id_post = ?";
-
-            try{
-                $stm = $this->db->prepare($sql);
-                $stm->bindValue(1,$post->getTitulo());
-                $stm->bindValue(2,$post->getConteudo());
-                $stm->bindValue(3,$post->getID());
-                $stm->execute();
-                
-                $this->db = null;
-                return "Post alterado com sucesso.";
-            }
-            catch (PDOException $e){
-                echo $e->getCode();
-                echo $e->getMessage();
-                echo "Probelma ao altera o Post.";
             }
         }
 

@@ -21,6 +21,9 @@
 			<div><?php echo $msg[1];?></div>
 			<br><br>
 
+    		<a href="/ProjetoBlog/inserirUsuarios">Caso não tenha um login, faça o cadastro aqui</a>
+			<br><br>
+
 			<input type="submit" value="Enviar">
 		</form>
 </body>

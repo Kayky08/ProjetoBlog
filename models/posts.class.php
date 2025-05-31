@@ -6,7 +6,8 @@
             private string $conteudo = "",
             private string $datap = "",
             private array $tags = array(),
-            private $usuario = null
+            private $categoria = null,
+            private $usuario = null,
         ){}
 
         public function getID(){
@@ -23,6 +24,9 @@
         }
         public function getTags(){
             return $this->tags;
+        }
+        public function getCategoria(){
+            return $this->categoria;
         }
         public function getUsuario(){
             return $this->usuario;
@@ -42,6 +46,9 @@
         }
         public function setTag($tags){
             $this->tags[] = $tags;
+        }
+        public function setCategoria($categoria){
+            $this->categoria = $categoria;
         }
         public function setUsuario($usuario){
             $this->usuario = $usuario;

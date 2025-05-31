@@ -27,6 +27,19 @@
         <div><?php echo $msg[2]; ?></div>
         <br><br>
 
+        <label for="categoria">Categoria: </label>
+        <select name="categoria" id="categoria">
+            <option value="0">Escolha uma categoria</option>
+            <?php 
+                foreach($categorias as $categoria){
+                    echo "
+                        <option value='{$categoria->id_categorias}'>{$categoria->cdescritivo}</option>
+                    ";
+                }
+            ?>
+        </select>
+        <br><br>
+
         <input type="submit" value="Postar">
     </form>
 </body>
