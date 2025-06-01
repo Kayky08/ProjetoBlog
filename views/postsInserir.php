@@ -8,7 +8,7 @@
 <body>
     <h1>Crie um Post</h1>
 
-    <a href="/ProjetoBlog/listarPosts">Voltar</a>
+    <a href="/ProjetoBlog/">Voltar</a>
     <br><br>
 
     <form action="#" method="post">
@@ -38,6 +38,7 @@
                 }
             ?>
         </select>
+        <div><?php echo $msg[3]; ?></div>
         <br><br>
 
         <input type="submit" value="Postar">

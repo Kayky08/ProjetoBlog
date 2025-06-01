@@ -40,7 +40,7 @@
             $categoriasDAO = new categoriasDAO($this->conexao);
             $categorias = $categoriasDAO->BuscarTodasCategorias();
 
-            $msg = ["","",""];
+            $msg = ["","","",""];
             $erro = false;
 
             if(!isset($_SESSION)) session_start();
@@ -58,16 +58,17 @@
                     $erro = true;
                     $msg[2] = "Preencha pelo menos uma Tag.";
                 }
+                if($_POST['categoria'] == 0){
+                    $erro = true;
+                    $msg[3] = "Escolha uma Categoria.";
+                }
 
                 if(!$erro){
                     $usuario = new Usuarios(id_usuarios: $_SESSION['id_usuarios']);
                     $categoria = new Categorias(id_categorias: $_POST['categoria']);
-                    
-                    var_dump($categoria->getID());
 
                     $post = new Posts(titulo:$_POST['titulo'],conteudo:$_POST['conteudo'],datap: date("Y-m-d H:i:s"),usuario:$usuario,categoria:$categoria);
 
-                    var_dump($post->getUsuario()->getID());
                     $postsDAO = new postsDAO($this->conexao);
                     $post = $postsDAO->inserir($post);
 

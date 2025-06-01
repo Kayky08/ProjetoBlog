@@ -42,7 +42,7 @@
             }
 
             public function inserir($tag){
-                $sql = "INSERT INTO tags (descritivo,id_categorias) VALUES (?)";
+                $sql = "INSERT INTO tags (descritivo) VALUES (?)";
 
                 try{
                     $stm = $this->db->prepare($sql);

@@ -15,6 +15,8 @@
 
 
         public function inserir(){
+            if(!isset($_SESSION)) session_start();
+
             $msg = ["","","",""];
             $erro = false;
 
@@ -25,11 +27,19 @@
                 }
                 if(empty($_POST['email'])){
                     $erro = true;
-                    $msg[1] = "Preencha o nome de Usuario.";
+                    $msg[1] = "Preencha o E-mail.";
+                }
+                if(empty($_POST['senha'])){
+                    $erro = true;
+                    $msg[2] = "Preencha a Senha.";
+                }
+                if(empty($_POST['vsenha'])){
+                    $erro = true;
+                    $msg[3] = "Preencha a verificação da Senha.";
                 }
                 if($_POST['senha'] != $_POST['vsenha']){
                     $erro = true;
-                    $msg[4] = "Por favor insira a senhas iguais.";
+                    $msg[3] = "Por favor insira a senhas iguais.";
                 }
 
                 if(!$erro){
@@ -37,15 +47,23 @@
                     $usuarioDAO = new usuariosDAO($this->conexao);
                     $usuarioDAO->inserir($usuario);
 
-                    header("location:/ProjetoBlog/listarUsuarios");
-                    die();
+                    if($_SESSION['tip'] == "administrador"){
+                        header("location:/ProjetoBlog/listarUsuarios");
+                        die();
+                    }
+                    else{
+                        header("location:/ProjetoBlog/login");
+                        die();
+                    }
                 }
             }
 
             require_once "views/usuariosInserir.php";
         }
 
-        public function alterar(){ 
+        public function alterar(){
+            if(!isset($_SESSION)) session_start();
+
             $msg = ["","","",""];
             
             if(isset($_GET)){
@@ -83,8 +101,16 @@
                     $usuarioDAO = new usuariosDAO($this->conexao);
                     $usuarioDAO->alterar($usuario);
 
-                    header("location:/ProjetoBlog/listarUsuarios");
-                    die();
+                    if($_SESSION['tipo'] == "administrador"){
+                        header("location:/ProjetoBlog/listarUsuarios");
+                        die();
+                    }
+                    else{
+                        $_SESSION['nome'] = $_POST['nome'];
+                    
+                        header("location:/ProjetoBlog/");
+                        die();
+                    }
                 }
             }
 

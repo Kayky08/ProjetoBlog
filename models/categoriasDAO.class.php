@@ -63,7 +63,7 @@
             }
 
             public function alterar($categoria){
-                $sql = "UPDATE categorias SET descritivo = ? WHERE id_categorias = ?";
+                $sql = "UPDATE categorias SET cdescritivo = ? WHERE id_categorias = ?";
 
                 try{
                     $stm = $this->db->prepare($sql);
@@ -71,7 +71,7 @@
                     $stm->bindValue(2,$categoria->getID());
                     $stm->execute();
                     
-                    $this->db = null;
+                    //$this->db = null;
                     return "Categoria alterada com sucesso.";
                 }
                 catch (PDOException $e){
@@ -82,7 +82,7 @@
             }
 
             public function deletar($categoria){
-                $sql = "DELETE FROM categorias WHERE id_tags = ?";
+                $sql = "DELETE FROM categorias WHERE id_categorias = ?";
 
                 try{
                     $stm = $this->db->prepare($sql);

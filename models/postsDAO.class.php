@@ -11,8 +11,8 @@
                     INNER JOIN usuarios u
                     on u.id_usuarios = p.id_usuarios
                     INNER JOIN categorias c
-                    on c.id_categorias = c.id_categorias
-                    GROUP BY p.id_posts";
+                    on p.id_categorias = c.id_categorias
+                    ORDER BY p.id_posts DESC";
 
             try{
                 $stm = $this->db->prepare($sql);

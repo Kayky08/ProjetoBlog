@@ -45,4 +45,12 @@
 	$route->get("/login", [usuariosController::class,"login"]);
 	$route->post("/login", [usuariosController::class,"login"]);
 	$route->get("/logout", [usuariosController::class,"logout"]);
+
+	//Categorias
+	$route->get("/listarCategorias", [categoriasController::class,"listar"]);
+	$route->get("/inserirCategorias", [categoriasController::class,"inserir"]);
+	$route->post("/inserirCategorias", [categoriasController::class,"inserir"]);
+	$route->get("/alterarCategorias", [categoriasController::class,"alterar"]);
+	$route->post("/alterarCategorias", [categoriasController::class,"alterar"]);
+	$route->get("/deletarCategorias", [categoriasController::class,"deletar"]);
 ?>
