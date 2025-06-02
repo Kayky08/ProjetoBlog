@@ -7,11 +7,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <title>Lista de Posts</title>
+    <link href="./src/output.css" rel="stylesheet">
+    <title>Entre Linhas e Telas</title>
 </head>
-<body class="bg-gray-100 p-6" >
-    <h1 class="text-5xl font-bold mb-4 text-center ">Entre Linhas e Telas</h1>
+<body class="bg-gray-100 p-6 font-mono" >
+
+    <h1 class="text-green-400 text-7xl font-bold mb-4 text-center">Entre Linhas e Telas</h1>
 
     <?php
         if(!empty($_SESSION['id_usuarios'])){
@@ -19,33 +20,33 @@
             switch($_SESSION['tipo']){
                 case "administrador":
                     echo "
-                    Olá, {$_SESSION['nome']}
-                
-                    <ul>
-                        <li><a href='/ProjetoBlog/listarUsuarios'>Usuarios</a></li>
-                        <li><a href='/ProjetoBlog/listarCategorias'>Categorias</a></li>
-                        <li><a href='/ProjetoBlog/alterarUsuarios?id={$_SESSION['id_usuarios']}'>Alterar</a></li>
-                        <li><a href='/ProjetoBlog/logout'>Logout</a></li>
+                    <ul class='flex justify-center gap-10 mt-10'>
+                        <li><a class='hover:bg-green-400 hover:text-white font-bold transition h-10 p-2 rounded-2xl' href='/ProjetoBlog/listarUsuarios'>Usuarios</a></li>
+                        <li><a class='hover:bg-green-400 hover:text-white font-bold transition h-10 p-2 rounded-2xl' href='/ProjetoBlog/listarCategorias'>Categorias</a></li>
+                        <li><a class='hover:bg-green-400 hover:text-white font-bold transition h-10 p-2 rounded-2xl' href='/ProjetoBlog/alterarUsuarios?id={$_SESSION['id_usuarios']}'>Editar perfil</a></li>
+                        <li><a class='hover:bg-red-400 hover:text-white font-bold transition h-10 p-2 rounded-2xl' href='/ProjetoBlog/logout'>Logout</a></li>
                     </ul>
+
+                    <div class='p-10'><p class='text-5xl text-center'>Olá, <strong class='text-green-400'>{$_SESSION['nome']}</strong></p></div>
                     ";
                 break;
 
                 case "comum":
                     echo "
-                    Olá, {$_SESSION['nome']}
-                
-                    <ul>
-                        <li><a href='/ProjetoBlog/logout'>Logout</a></li>
-                        <li><a href='/ProjetoBlog/alterarUsuarios?id={$_SESSION['id_usuarios']}'>Alterar</a></li>
-                    </ul>
+                        <ul class='flex justify-center gap-10 mt-10'>
+                            <li><a class='hover:bg-green-400 hover:text-white font-bold transition h-10 p-2 rounded-2xl' href='/ProjetoBlog/alterarUsuarios?id={$_SESSION['id_usuarios']}'>Editar perfil</a></li>
+                            <li><a class='hover:bg-red-400 hover:text-white font-bold transition h-10 p-2 rounded-2xl' href='/ProjetoBlog/logout'>Logout</a></li>
+                        </ul>
 
-                    <a href='/ProjetoBlog/inserirPosts'>Criar um Post</a>
+                    <div class='p-10'><p class='text-5xl text-center'>Olá, <strong class='text-green-400 uppercase'>{$_SESSION['nome']}</strong></p></div>
+
+                    <div class='flex justify-center'><a class='hover:bg-green-300 text-center text-3xl text-white w-2xl mx-auto mb-10 bg-green-400 p-8 rounded-2xl' href='/ProjetoBlog/inserirPosts'>+</a></div>
                     ";
                 break;
             }
         }
         else{
-            echo "Para fazer um post faça o <a href='/ProjetoBlog/login'>Login</a>";
+            echo "<div ><a class='hover:bg-green-300 flex justify-center mx-auto mb-10 mt-10 align-middle w-100 rounded-2xl p-5 bg-green-400 text-white' href='/ProjetoBlog/login'>Para fazer um post faça o Login</a></div>";
         }
 
         foreach($postsAgrupados as $post){
@@ -53,18 +54,30 @@
             $dataFormatada = $data->format('d/m/Y H:i:s');
 
             echo "        
-                <div class='max-w-4xl mx-auto bg-white p-8 rounded-2xl shadow-md'>       
-                    <p class='font-bold'>{$post['usuario']}</p>
-                    <p>{$dataFormatada}</p>
+                <div class='max-w-4xl mx-auto mb-10 bg-white p-8 rounded-2xl shadow-md'>
+            ";       
 
-                    <h2 class='text-2xl font-bold mb-6 text-center'>{$post['titulo']}</h2>
+            if(!empty($_SESSION['tipo']) && $_SESSION['tipo'] == 'administrador'){
+                echo "<div class='flex justify-end m-5'><a class=' bg-red-400 p-2 rounded-xl text-white' href='/ProjetoBlog/deletarPosts?id={$post['id']}'>Excluir</a></div>";
+            }
 
-                    <p class='mb-6'>{$post['conteudo']}</p>
+            echo "
+                    <div class='flex justify-between'>    
+                        <p class='font-bold uppercase'>{$post['usuario']}</p>
+                        <p>{$dataFormatada}</p>
+                    </div>
+
+                    <h2 class='text-green-400 text-3xl font-bold mb-6 text-center m-5'>{$post['titulo']}</h2>
+
+                    <p class='mb-6 text-justify'>{$post['conteudo']}</p>
+                
+
+                    <p class='text-green-400'><strong>Tags: </strong>" . implode(', ', $post['tags']) . "</p>
+                    <p class='text-green-400'><strong>Categoria:</strong> {$post['categoria']}</p>
                 </div>
             ";
             
-            echo "<p><strong>Tags:</strong> " . implode(', ', $post['tags']) . "</p>";
-            echo "<p><strong>Categoria:</strong> {$post['categoria']}</p>";
+
         }
     ?>
 </body>
