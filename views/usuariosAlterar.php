@@ -1,37 +1,47 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastre um Usuario</title>
-</head>
-<body>
-    <h1>Edite seu perfil</h1>
+<?php 
+    require_once "layoutCabecalho.php";
+?>
+    <h1 class="text-center text-3xl mt-5 mb-5 font-bold text-green-400">Edite seu perfil</h1>
 
-    <form action="" method="post">
+    <form class="max-w-4xl mx-auto mb-10 bg-white p-8 rounded-2xl shadow-md" action="" method="post">
         <input type="hidden" id="id" name="id" value="<?php echo $retorno[0]->id_usuarios;?>">
 
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" name="nome" value="<?php echo $retorno[0]->nome;?>">
-        <div><?php echo $msg[0]; ?></div>
-        <br><br>
+        <div>
+            <label for="nome" class="block text-sm font-medium text-gray-600">Nome: </label>
+            <input type="text" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" id="nome" name="nome" value="<?php echo $retorno[0]->nome;?>">
+            <div class="text-center text-red-400"><?php echo $msg[0]; ?></div>
+        </div>
 
-        <label for="email">E-mail:</label>
-        <input type="email" id="email" name="email" value="<?php echo $retorno[0]->email;?>">
-        <div><?php echo $msg[1]; ?></div>
-        <br><br>
+        <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1" for="tipo">Tipo do Usuario: </label>
+            <select class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" name="tipo" id="tipo">
+                <option  value="0">Altere o tipo do Usuario</option>
+                <option  value="comum">Comum</option>
+                <option  value="administrador">Administrador</option>
+            </select>
+            <div class="text-center text-red-400"><?php echo $msg[1]; ?></div>
+        </div>
 
-        <label for="senha">Senha:</label>
-        <input type="password" id="senha" name="senha" value="<?php echo $retorno[0]->senha;?>">
-        <div><?php echo $msg[2]; ?></div>
-        <br><br>
+        <div>
+            <label for="email" class="block text-sm font-medium text-gray-600">E-mail:</label>
+            <input type="email" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" id="email" name="email" value="<?php echo $retorno[0]->email;?>">
+            <div class="text-center text-red-400"><?php echo $msg[2]; ?></div>
+        </div>
 
-        <label for="vsenha">Confirme a senha:</label>
-        <input type="password" id="vsenha" name="vsenha" value="<?php echo $retorno[0]->senha;?>">
-        <div><?php echo $msg[3]; ?></div>
-        <br><br>
+        <div>
+            <label for="senha" class="block text-sm font-medium text-gray-600">Senha:</label>
+            <input type="password" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" id="senha" name="senha">
+        </div>
 
-        <input type="submit" value="Postar">
+        <div>
+            <label for="vsenha" class="block text-sm font-medium text-gray-600">Confirme a senha:</label>
+            <input type="password" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" id="vsenha" name="vsenha">
+            <div class="text-center text-red-400"><?php echo $msg[3]; ?></div>
+        </div>
+
+        <div class="flex justify-center">
+            <button type="submit" class="bg-green-400 text-white m-5 py-2 px-4 rounded-lg hover:bg-green-300 transition-colors">Enviar</button>
+        </div>
     </form>
 </body>
 </html>

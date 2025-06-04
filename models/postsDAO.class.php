@@ -59,6 +59,23 @@
             }
         }
 
+        public function buscarPorUsuario($usuario){
+            $sql = "SELECT * FROM posts WHERE id_usuarios = ?";
+
+            try{
+                $stm = $this->db->prepare($sql);
+                $stm->bindValue(1,$usuario->getID());
+                $stm->execute();
+
+                return $stm->fetchAll(PDO::FETCH_OBJ);
+            }
+            catch(PDOException $e){
+                echo $e->getCode();
+                echo $e->getMessage();
+                echo "Falha ao buscar relações pelo Usuario.";
+            }
+        }
+
         public function inserir($post){
             $sql = "INSERT INTO posts (titulo,conteudo,datap,id_usuarios,id_categorias) VALUES (?,?,?,?,?)";
 

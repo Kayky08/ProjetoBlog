@@ -79,26 +79,31 @@
                     $erro = true;
                     $msg[0] = "Preencha o nome de Usuario.";
                 }
-                if(empty($_POST['email'])){
+                if($_POST['tipo'] == 0){
                     $erro = true;
-                    $msg[1] = "Preencha o nome de Usuario.";
+                    $msg[1] = "Escolha o tipo de Usuário.";
                 }
-                if(empty($_POST['senha'])){
+                if(empty($_POST['email'])){
                     $erro = true;
                     $msg[2] = "Preencha o nome de Usuario.";
                 }
-                if(empty($_POST['vsenha'])){
-                    $erro = true;
-                    $msg[3] = "Preencha o nome de Usuario.";
-                }
-                if($_POST['senha'] != $_POST['vsenha']){
-                    $erro = true;
-                    $msg[4] = "Por favor insira a senhas iguais.";
+                if(!empty($_POST['senha']) || !empty($_POST['vsenha'])){
+                    if($_POST['senha'] != $_POST['vsenha']){
+                        $erro = true;
+                        $msg[3] = "Por favor insira a senhas iguais.";
+                    }
                 }
 
                 if(!$erro){
-                    $usuario = new Usuarios(id_usuarios:$_POST['id'],nome:$_POST['nome'],email:$_POST['email'],senha:md5($_POST['senha']));
+                    $senha = null;
+                    if(!empty($_POST['senha'])){
+                        $senha = md5($_POST['senha']);
+                    }
+
                     $usuarioDAO = new usuariosDAO($this->conexao);
+                    $usuarioAtual = $usuarioDAO->buscarUmUsuario(new Usuarios(id_usuarios:$_GET['id']));
+
+                    $usuario = new Usuarios(id_usuarios:$_POST['id'],tipo:$_POST['tipo'],nome:$_POST['nome'],email:$_POST['email'],senha: $senha ?? $usuarioAtual[0]->senha);
                     $usuarioDAO->alterar($usuario);
 
                     if($_SESSION['tipo'] == "administrador"){
@@ -120,6 +125,26 @@
         public function deletar(){
             if(isset($_GET)){
                 $usuario = new Usuarios(id_usuarios:$_GET['id']);
+
+                $postsDAO = new postsDAO($this->conexao);
+                $relacoes = $postsDAO->BuscarPorUsuario($usuario);
+
+                
+                foreach($relacoes as $relacao){
+                    $post = new Posts(id_posts: $relacao->id_posts);
+
+                    $postsTagsDAO = new postsTagsDAO($this->conexao);
+                    $relacoes = $postsTagsDAO->buscarPorPost($post);
+
+                    foreach($relacoes as $relacao){
+                        $postsTags = new postsTags(id_posts_tags: $relacao->id_posts_tags);
+                        $postsTagsDAO->deletar($postsTags);
+                    }
+
+                    $postDAO = new postsDAO($this->conexao);
+                    $postDAO->deletar($post);
+                }
+                
                 $usuarioDAO = new usuariosDAO($this->conexao);
                 $usuarioDAO->deletar($usuario);
 
@@ -177,7 +202,6 @@
                         $_SESSION['tipo'] = $retorno[0]->tipo;
                         $_SESSION['nome'] = $retorno[0]->nome;
                         $_SESSION['email'] = $retorno[0]->email;
-
 
                         header("location:/ProjetoBlog/");
                         die();

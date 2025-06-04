@@ -25,7 +25,8 @@
         public function buscarUmUsuario($usuario){
             $sql = "SELECT * 
                     FROM usuarios 
-                    WHERE id_usuarios = ?";
+                    WHERE id_usuarios = ?
+                    LIMIT 1";
 
             try{
                 $stm = $this->db->prepare($sql);
@@ -69,15 +70,16 @@
         }
 
         public function alterar($usuario){
-            $sql = "UPDATE usuarios SET nome = ?, email = ?, senha = ? 
+            $sql = "UPDATE usuarios SET nome = ?, tipo = ?, email = ?, senha = ? 
                     WHERE id_usuarios = ?";
 
             try{
                 $stm = $this->db->prepare($sql);
                 $stm->bindValue(1,$usuario->getNome());
-                $stm->bindValue(2,$usuario->getEmail());
-                $stm->bindValue(3,$usuario->getSenha());
-                $stm->bindValue(4,$usuario->getID());
+                $stm->bindValue(2,$usuario->getTipo());
+                $stm->bindValue(3,$usuario->getEmail());
+                $stm->bindValue(4,$usuario->getSenha());
+                $stm->bindValue(5,$usuario->getID());
                 $stm->execute();
                 
                 $this->db = null;
