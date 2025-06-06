@@ -2,11 +2,13 @@
     class usuariosController{
         private $conexao;
 
+        //Criando a Conexão com o banco de dados
         public function __construct(){
             $this->conexao = Conexao::getInstancia();
         }
 
         public function listar(){
+            //Buscando todas os Usuarios e exibindo
             $usuarioDAO = new usuariosDAO($this->conexao);
             $retorno = $usuarioDAO->buscarTodosUsuarios();
 
@@ -15,12 +17,15 @@
 
 
         public function inserir(){
+            //Iniciando a sessão para exibir o header correspondente
             if(!isset($_SESSION)) session_start();
 
             $msg = ["","","",""];
             $erro = false;
 
+            //Verificando se veio dados via Post
             if($_POST){
+                //Verificando se os campos não estão vazios
                 if(empty($_POST['nome'])){
                     $erro = true;
                     $msg[0] = "Preencha o nome de Usuario.";
@@ -43,10 +48,20 @@
                 }
 
                 if(!$erro){
-                    $usuario = new Usuarios(nome:$_POST['nome'],tipo:'comum',email:$_POST['email'],senha:md5($_POST['senha']));
+
+                    //Criando o objeto com os dados do Post
+                    $usuario = new Usuarios(
+                        nome:$_POST['nome'],
+                        tipo:'comum',
+                        email:$_POST['email'],
+                        senha:md5($_POST['senha'])
+                    );
+
+                    //Inserindo o usuaio no banco de dados
                     $usuarioDAO = new usuariosDAO($this->conexao);
                     $usuarioDAO->inserir($usuario);
 
+                    //Verificanção para saber onde direcionar o usuario
                     if($_SESSION['tipo'] == "administrador"){
                         header("location:/ProjetoBlog/listarUsuarios");
                         die();
@@ -62,19 +77,23 @@
         }
 
         public function alterar(){
+            //Iniciando a sessão para exibir o header correspondente
             if(!isset($_SESSION)) session_start();
 
             $msg = ["","","",""];
+            $erro = false;
             
+            //Verificando se o metodo Get veio com dados
             if(isset($_GET)){
+                //Buscando o usuario com relacionado com o id recebido via Get
                 $usuario = new Usuarios(id_usuarios:$_GET['id']);
                 $usuarioDAO = new usuariosDAO($this->conexao);
                 $retorno = $usuarioDAO->buscarUmUsuario($usuario);
             }
             
-            if($_POST){
-                $erro = false;
-                
+            //Verificando se recebeu os dados via Post
+            if($_POST){                
+                //Verificando se os campos não estão vazios
                 if(empty($_POST['nome'])){
                     $erro = true;
                     $msg[0] = "Preencha o nome de Usuario.";
@@ -95,24 +114,30 @@
                 }
 
                 if(!$erro){
+                    //Verificando se o usuario trocou de senha
                     $senha = null;
                     if(!empty($_POST['senha'])){
                         $senha = md5($_POST['senha']);
                     }
 
+                    //Criando um objeto com os dados do usuario atual
+                    $usuario_Atual = new Usuarios(id_usuarios:$_GET['id']);
                     $usuarioDAO = new usuariosDAO($this->conexao);
-                    $usuarioAtual = $usuarioDAO->buscarUmUsuario(new Usuarios(id_usuarios:$_GET['id']));
+                    $usuarioAtual = $usuarioDAO->buscarUmUsuario($usuario_Atual);
 
                     $usuario = new Usuarios(
                         id_usuarios:$_POST['id'],
                         tipo:$_POST['tipo'],
                         nome:$_POST['nome'],
                         email:$_POST['email'],
+                        //Verificando se senha é nulo, se não inseri a mesma senha
                         senha: $senha ?? $usuarioAtual[0]->senha
                     );
 
+                    //Alterando os dados no banco de dados
                     $usuarioDAO->alterar($usuario);
 
+                    //Verificanção para saber onde direcionar o usuario
                     if($_SESSION['tipo'] == "administrador"){
                         header("location:/ProjetoBlog/listarUsuarios");
                         die();
@@ -131,28 +156,36 @@
         }
 
         public function deletar(){
+            //Verificando se o metodo Get veio com dados
             if(isset($_GET)){
+                //Criando um objeto com o id do usuario que sera excluido
                 $usuario = new Usuarios(id_usuarios:$_GET['id']);
 
+                //Verificando se o usuario fez posts e buscando caso tenha
                 $postsDAO = new postsDAO($this->conexao);
                 $relacoes = $postsDAO->BuscarPorUsuario($usuario);
 
-                
+                //Excluindo todos os posts que o usuario fez
                 foreach($relacoes as $relacao){
+                    //Criando um objeto Post com o usuario
                     $post = new Posts(id_posts: $relacao->id_posts);
 
+                    //Bucando o post que esta relacionado com o usuario
                     $postsTagsDAO = new postsTagsDAO($this->conexao);
                     $relacoes = $postsTagsDAO->buscarPorPost($post);
 
+                    //Deletando as relações das tags com o post
                     foreach($relacoes as $relacao){
                         $postsTags = new postsTags(id_posts_tags: $relacao->id_posts_tags);
                         $postsTagsDAO->deletar($postsTags);
                     }
 
+                    //Deletando o post
                     $postDAO = new postsDAO($this->conexao);
                     $postDAO->deletar($post);
                 }
                 
+                //Deletando o usuario 
                 $usuarioDAO = new usuariosDAO($this->conexao);
                 $usuarioDAO->deletar($usuario);
 
@@ -164,9 +197,11 @@
         public function login(){
             $msg = ["","",""];
 
+            //Verificando se recebeu os dados via Post
             if($_POST){
                 $erro = false;
 
+                //Verificando se os campos não estão vazios
                 if(empty($_POST['email'])){
                     $erro = true;
                     $msg[0] = "Preencha a parte de e-mail.";
@@ -176,35 +211,18 @@
                     $msg[1] = "Preencha a parte de senha.";
                 }
 
+
                 if(!$erro){
-                    // if($_POST['email'] == "administrador@gmail.com" && $_POST['senha'] == "admin"){
-                    //     $usuario = new Usuarios(email:$_POST['email'], senha:$_POST['senha']);
-                    
-                    //     $usuarioDAO = new usuariosDAO($this->conexao);
-                    //     $retorno = $usuarioDAO->verificarUsuario($usuario);                   
-
-                    //     if(!empty($retorno)){
-                    //         session_start();
-                    //         $_SESSION['id_usuarios'] = $retorno[0]->id_usuarios;
-                    //         $_SESSION['tipo'] = $retorno[0]->tipo;
-                    //         $_SESSION['nome'] = $retorno[0]->nome;
-                    //         $_SESSION['email'] = $retorno[0]->email;
-
-
-                    //         header("location:/ProjetoBlog/");
-                    //         die();
-                    //     }
-                    //     else{
-                    //         $msg[2] = "Confira seu E-mail/Senha."; 
-                    //     }
-                    // }
-
+                    //Criando o objeto do usuario 
                     $usuario = new Usuarios(email:$_POST['email'], senha:md5($_POST['senha']));
                     
+                    //Verificando se o usuario esta cadastrado no banco de dados
                     $usuarioDAO = new usuariosDAO($this->conexao);
                     $retorno = $usuarioDAO->verificarUsuario($usuario);                   
 
+                    //Verificando se os dados não estão vazios
                     if(!empty($retorno)){
+                        //Criando uma sessão com os dados do usaurio
                         session_start();
                         $_SESSION['id_usuarios'] = $retorno[0]->id_usuarios;
                         $_SESSION['tipo'] = $retorno[0]->tipo;
@@ -224,10 +242,14 @@
         }
 
         public function logout(){
+            //Iniciando a sessão
             session_start();
+            //Deixando a sessão nula
 			$_SESSION = array();
+            //Destruindo a sessão
 			session_destroy();
 
+            //Redirecionando para a pagina inicial
 			header("location:/ProjetoBlog/");
         }
     }

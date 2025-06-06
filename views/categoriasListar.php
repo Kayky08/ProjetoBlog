@@ -23,8 +23,8 @@
                         <td class='px-4 py-2 text-center text-sm text-gray-800'>{$dado->cdescritivo}</td>
             
                         <td class='flex justify-center px-4 py-3 space-x-2'>
-                            <a class='px-3 py-1 text-sm text-white bg-blue-400 rounded hover:bg-blue-300' href='/ProjetoBlog/alterarUsuarios?id={$dado->id_categorias}'>Alterar</a>
-                            <a class='px-3 py-1 text-sm text-white bg-red-400 rounded hover:bg-red-300' href='/ProjetoBlog/deletarUsuarios?id={$dado->id_categorias}'>Excluir</a>
+                            <a class='px-3 py-1 text-sm text-white bg-blue-400 rounded hover:bg-blue-300' href='/ProjetoBlog/alterarCategorias?id={$dado->id_categorias}'>Alterar</a>
+                            <a class='px-3 py-1 text-sm text-white bg-red-400 rounded hover:bg-red-300' href='/ProjetoBlog/alterarCategorias?id={$dado->id_categorias}'>Excluir</a>
                         </td>
                     </tr>
                 ";

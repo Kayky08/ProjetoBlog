@@ -24,9 +24,6 @@
 
     //Criando a rota
 	$route = new Rotas();
-
-    //Inicio
-	//$route->get("/", [inicioController::class,"inicio"]);
 	
 	//Posts
 	$route->get("/", [postsController::class,"listar"]);
