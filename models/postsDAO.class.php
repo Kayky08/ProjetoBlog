@@ -39,8 +39,8 @@
                     INNER JOIN usuarios u
                     on u.id_usuarios = p.id_usuarios
                     INNER JOIN categorias c
-                    on c.id_categorias = c.id_categorias
-                    WHERE id_post = ?";
+                    on c.id_categorias = p.id_categorias
+                    WHERE p.id_post = ?";
 
             try{
                 $stm = $this->db->prepare($sql);
@@ -73,6 +73,33 @@
                 echo $e->getCode();
                 echo $e->getMessage();
                 echo "Falha ao buscar relações pelo Usuario.";
+            }
+        }
+
+        public function buscarPorCategoria($categoria){
+            $sql = "SELECT * FROM posts p
+                    INNER JOIN posts_tags pt
+                    ON p.id_posts = pt.id_posts
+                    INNER JOIN tags t
+                    ON t.id_tags = pt.id_tags
+                    INNER JOIN usuarios u
+                    on u.id_usuarios = p.id_usuarios
+                    INNER JOIN categorias c
+                    on c.id_categorias = p.id_categorias
+                    WHERE p.id_categorias = ?
+                    ";
+
+            try{
+                $stm = $this->db->prepare($sql);
+                $stm->bindValue(1,$categoria->getID());
+                $stm->execute();
+
+                return $stm->fetchAll(PDO::FETCH_OBJ);
+            }
+            catch(PDOException $e){
+                echo $e->getCode();
+                echo $e->getMessage();
+                echo "Falha ao buscar relações pela Categoria.";
             }
         }
 

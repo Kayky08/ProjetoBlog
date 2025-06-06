@@ -33,6 +33,8 @@
 	$route->get("/inserirPosts", [postsController::class,"inserir"]);
 	$route->post("/inserirPosts", [postsController::class,"inserir"]);
 	$route->get("/deletarPosts", [postsController::class,"deletar"]);
+	$route->get("/filtrar", [postsController::class,"filtrar"]);
+	$route->post("/filtrar", [postsController::class,"filtrar"]);
 
 	//Usuarios
 	$route->get("/listarUsuarios", [usuariosController::class,"listar"]);

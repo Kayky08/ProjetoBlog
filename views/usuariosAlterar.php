@@ -12,15 +12,47 @@
             <div class="text-center text-red-400"><?php echo $msg[0]; ?></div>
         </div>
 
-        <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1" for="tipo">Tipo do Usuario: </label>
-            <select class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" name="tipo" id="tipo">
-                <option  value="0">Altere o tipo do Usuario</option>
-                <option  value="comum">Comum</option>
-                <option  value="administrador">Administrador</option>
-            </select>
-            <div class="text-center text-red-400"><?php echo $msg[1]; ?></div>
-        </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="tipo">Tipo do Usuario: </label>
+                <select class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" name="tipo" id="tipo">
+                    <?php
+                        if($_SESSION['tipo'] == 'administrador'){
+                            if($retorno[0]->tipo == "comum"){
+                                echo "
+                                <option  value='0'>Altere o tipo do Usuario</option>
+                                <option  value='administrador'>Administrador</option>
+                                <option  value='comum' selected>Comum</option>
+                                ";
+                            }
+                                
+                            if($retorno[0]->tipo == "administrador"){
+                                echo "
+                                <option  value='0'>Altere o tipo do Usuario</option>
+                                <option  value='administrador' selected>Administrador</option>
+                                <option  value='comum'>Comum</option>
+                                ";
+                            }
+                        }
+                        else{
+                            if($retorno[0]->tipo == "comum"){
+                                echo "
+                                <option  value='0'>Altere o tipo do Usuario</option>
+                                <option  value='comum' selected>Comum</option>
+                                ";
+                            }
+                                
+                            if($retorno[0]->tipo == "administrador"){
+                                echo "
+                                <option  value='0'>Altere o tipo do Usuario</option>
+                                <option  value='administrador' selected>Administrador</option>
+                                <option  value='comum'>Comum</option>
+                                ";
+                            }
+                        }
+                    ?>
+                </select>
+                <div class="text-center text-red-400"><?php echo $msg[1]; ?></div>
+            </div>
 
         <div>
             <label for="email" class="block text-sm font-medium text-gray-600">E-mail:</label>

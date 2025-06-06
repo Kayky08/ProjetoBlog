@@ -47,7 +47,7 @@
                     $usuarioDAO = new usuariosDAO($this->conexao);
                     $usuarioDAO->inserir($usuario);
 
-                    if($_SESSION['tip'] == "administrador"){
+                    if($_SESSION['tipo'] == "administrador"){
                         header("location:/ProjetoBlog/listarUsuarios");
                         die();
                     }
@@ -103,7 +103,14 @@
                     $usuarioDAO = new usuariosDAO($this->conexao);
                     $usuarioAtual = $usuarioDAO->buscarUmUsuario(new Usuarios(id_usuarios:$_GET['id']));
 
-                    $usuario = new Usuarios(id_usuarios:$_POST['id'],tipo:$_POST['tipo'],nome:$_POST['nome'],email:$_POST['email'],senha: $senha ?? $usuarioAtual[0]->senha);
+                    $usuario = new Usuarios(
+                        id_usuarios:$_POST['id'],
+                        tipo:$_POST['tipo'],
+                        nome:$_POST['nome'],
+                        email:$_POST['email'],
+                        senha: $senha ?? $usuarioAtual[0]->senha
+                    );
+
                     $usuarioDAO->alterar($usuario);
 
                     if($_SESSION['tipo'] == "administrador"){
@@ -111,7 +118,8 @@
                         die();
                     }
                     else{
-                        $_SESSION['nome'] = $_POST['nome'];
+                        $_SESSION['nome'] = $_POST['nome']; 
+                        $_SESSION['email'] = $_POST['email'];
                     
                         header("location:/ProjetoBlog/");
                         die();
@@ -169,27 +177,27 @@
                 }
 
                 if(!$erro){
-                    if($_POST['email'] == "admin@admin.com" && $_POST['senha'] == "admin"){
-                        $usuario = new Usuarios(email:$_POST['email'], senha:$_POST['senha']);
+                    // if($_POST['email'] == "administrador@gmail.com" && $_POST['senha'] == "admin"){
+                    //     $usuario = new Usuarios(email:$_POST['email'], senha:$_POST['senha']);
                     
-                        $usuarioDAO = new usuariosDAO($this->conexao);
-                        $retorno = $usuarioDAO->verificarUsuario($usuario);                   
+                    //     $usuarioDAO = new usuariosDAO($this->conexao);
+                    //     $retorno = $usuarioDAO->verificarUsuario($usuario);                   
 
-                        if(!empty($retorno)){
-                            session_start();
-                            $_SESSION['id_usuarios'] = $retorno[0]->id_usuarios;
-                            $_SESSION['tipo'] = $retorno[0]->tipo;
-                            $_SESSION['nome'] = $retorno[0]->nome;
-                            $_SESSION['email'] = $retorno[0]->email;
+                    //     if(!empty($retorno)){
+                    //         session_start();
+                    //         $_SESSION['id_usuarios'] = $retorno[0]->id_usuarios;
+                    //         $_SESSION['tipo'] = $retorno[0]->tipo;
+                    //         $_SESSION['nome'] = $retorno[0]->nome;
+                    //         $_SESSION['email'] = $retorno[0]->email;
 
 
-                            header("location:/ProjetoBlog/");
-                            die();
-                        }
-                        else{
-                            $msg[2] = "Confira seu E-mail/Senha."; 
-                        }
-                    }
+                    //         header("location:/ProjetoBlog/");
+                    //         die();
+                    //     }
+                    //     else{
+                    //         $msg[2] = "Confira seu E-mail/Senha."; 
+                    //     }
+                    // }
 
                     $usuario = new Usuarios(email:$_POST['email'], senha:md5($_POST['senha']));
                     

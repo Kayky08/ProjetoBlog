@@ -9,25 +9,30 @@
         }
 
         public function listar(){
+            $postsAgrupados = [];
+            
             $postsDAO = new postsDAO($this->conexao);
-            $retorno = $postsDAO->BuscarTodosPosts();
+            $posts = $postsDAO->BuscarTodosPosts();
 
-            foreach ($retorno as $linha) {
-                $id = $linha->id_posts;
+            $categoriasDAO = new categoriasDAO($this->conexao);
+            $categorias = $categoriasDAO->BuscarTodasCategorias();
+
+            foreach ($posts as $post) {
+                $id = $post->id_posts;
 
                 if (!isset($postsAgrupados[$id])) {
                     $postsAgrupados[$id] = [
-                        'id' => $linha->id_posts,
-                        'titulo' => $linha->titulo,
-                        'datap' => $linha->datap,
-                        'conteudo' => $linha->conteudo,
-                        'usuario' => $linha->nome,
-                        'categoria' => $linha->cdescritivo,
+                        'id' => $post->id_posts,
+                        'titulo' => $post->titulo,
+                        'datap' => $post->datap,
+                        'conteudo' => $post->conteudo,
+                        'usuario' => $post->nome,
+                        'categoria' => $post->cdescritivo,
                         'tags' => []
                     ];
                 }
 
-                $postsAgrupados[$id]['tags'][] = $linha->descritivo;
+                $postsAgrupados[$id]['tags'][] = $post->descritivo;
             }
 
             require_once "views/postsListar.php";
@@ -118,6 +123,46 @@
 
                 header("location:/ProjetoBlog/");
                 die();
+            }
+        }
+
+        public function filtrar(){
+            if($_POST){
+                if($_POST['categoria'] > 0){
+                    $postsAgrupados = [];
+
+                    $categoriaPost = new Categorias(id_categorias:$_POST['categoria']);
+
+                    $postsDAO = new postsDAO($this->conexao);
+                    $posts = $postsDAO->buscarPorCategoria($categoriaPost);
+
+                    $categoriasDAO = new categoriasDAO($this->conexao); 
+                    $categorias = $categoriasDAO->BuscarTodasCategorias();
+
+                    foreach ($posts as $post) {
+                        $id = $post->id_posts;
+
+                        if (!isset($postsAgrupados[$id])) {
+                            $postsAgrupados[$id] = [
+                                'id' => $post->id_posts,
+                                'titulo' => $post->titulo,
+                                'datap' => $post->datap,
+                                'conteudo' => $post->conteudo,
+                                'usuario' => $post->nome,
+                                'categoria' => $post->cdescritivo,
+                                'tags' => []
+                            ];
+                        }
+
+                        $postsAgrupados[$id]['tags'][] = $post->descritivo;
+                    }
+
+                    require_once "views/postsListar.php";
+                }
+                else{
+                    header("location:/ProjetoBlog/");
+                    die();
+                }
             }
         }
     }
