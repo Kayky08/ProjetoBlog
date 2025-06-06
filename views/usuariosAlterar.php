@@ -1,9 +1,10 @@
 <?php 
     require_once "layoutCabecalho.php";
 ?>
-    <h1 class="text-center text-3xl mt-5 mb-5 font-bold text-green-400">Edite seu perfil</h1>
 
-    <form class="max-w-4xl mx-auto mb-10 bg-white p-8 rounded-2xl shadow-md" action="" method="post">
+    <form class="max-w-4xl mx-auto m-10 bg-white p-8 rounded-2xl shadow-md" action="" method="post">
+        <h1 class="text-center text-3xl mt-5 mb-5 font-bold text-green-400">Edite seu perfil</h1>
+
         <input type="hidden" id="id" name="id" value="<?php echo $retorno[0]->id_usuarios;?>">
 
         <div>

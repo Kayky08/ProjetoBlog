@@ -3,7 +3,7 @@
 ?>
     <h1 class="text-center text-3xl mt-5 mb-5 font-bold text-green-400">Lista de Categorias</h1>
 
-    <div class="flex justify-center"><a class="text-2xl m-5 p-2 text-white bg-green-400 rounded-lg hover:bg-green-300" href="/ProjetoBlog/inserirCategorias">Criar uma Categoria</a></div>
+    <div class="flex justify-center"><a class="text-xl p-3 m-5 text-white bg-green-400 rounded-lg hover:bg-green-300" href="/ProjetoBlog/inserirCategorias">Criar uma Categoria</a></div>
 
     <table class="min-w-full divide-y bg-white divide-gray-200 border border-green-500">
         <thead>
@@ -24,7 +24,7 @@
             
                         <td class='flex justify-center px-4 py-3 space-x-2'>
                             <a class='px-3 py-1 text-sm text-white bg-blue-400 rounded hover:bg-blue-300' href='/ProjetoBlog/alterarCategorias?id={$dado->id_categorias}'>Alterar</a>
-                            <a class='px-3 py-1 text-sm text-white bg-red-400 rounded hover:bg-red-300' href='/ProjetoBlog/alterarCategorias?id={$dado->id_categorias}'>Excluir</a>
+                            <a class='px-3 py-1 text-sm text-white bg-red-400 rounded hover:bg-red-300' href='/ProjetoBlog/deletarCategorias?id={$dado->id_categorias}'>Excluir</a>
                         </td>
                     </tr>
                 ";
@@ -32,6 +32,7 @@
             ?>
         </tbody>
     </table>
+
 <?php
     require_once "layoutRodape.php";
 ?>

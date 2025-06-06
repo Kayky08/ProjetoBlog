@@ -139,6 +139,8 @@
 
                     //Verificanção para saber onde direcionar o usuario
                     if($_SESSION['tipo'] == "administrador"){
+                        $_SESSION['nome'] = $_POST['nome']; 
+                        $_SESSION['email'] = $_POST['email'];
                         header("location:/ProjetoBlog/listarUsuarios");
                         die();
                     }

@@ -3,9 +3,9 @@
 ?>
     <h1 class="text-center text-3xl mt-5 mb-5 font-bold text-green-400">Lista de Usuarios</h1>
 
-    <div class="flex justify-center"><a class="text-2xl p-2 m-5 text-white bg-green-400 rounded-lg hover:bg-green-300" href="/ProjetoBlog/inserirUsuarios">Criar um Usuario</a></div>
+    <div class="flex justify-center"><a class="text-xl p-3 m-5 text-white bg-green-400 rounded-lg hover:bg-green-300" href="/ProjetoBlog/inserirUsuarios">Criar um Usuario</a></div>
 
-    <table class="min-w-full divide-y divide-gray-200 bg-white border border-green-500">
+    <table class="min-w-full divide-y bg-white divide-gray-200 border border-green-500">
         <thead>
             <tr class="border border-green-500 bg-green-300">
                 <th class='px-4 py-2 text-center font-semibold text-white'>Codigo</th>
