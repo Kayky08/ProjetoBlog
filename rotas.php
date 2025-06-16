@@ -29,17 +29,23 @@
 	$route->get("/", [postsController::class,"listar"]);
 	$route->get("/inserirPosts", [postsController::class,"inserir"]);
 	$route->post("/inserirPosts", [postsController::class,"inserir"]);
+	$route->get("/alterarPosts", [postsController::class,"alterar"]);
+	$route->post("/alterarPosts", [postsController::class,"alterar"]);
 	$route->get("/deletarPosts", [postsController::class,"deletar"]);
 	$route->get("/filtrar", [postsController::class,"filtrar"]);
 	$route->post("/filtrar", [postsController::class,"filtrar"]);
 
 	//Usuarios
 	$route->get("/listarUsuarios", [usuariosController::class,"listar"]);
+	$route->get("/perfil", [usuariosController::class,"perfil"]);
 	$route->get("/inserirUsuarios", [usuariosController::class,"inserir"]);
 	$route->post("/inserirUsuarios", [usuariosController::class,"inserir"]);
 	$route->get("/alterarUsuarios", [usuariosController::class,"alterar"]);
 	$route->post("/alterarUsuarios", [usuariosController::class,"alterar"]);
+	$route->get("/alterarSenha", [usuariosController::class,"alterarSenha"]);
+	$route->post("/alterarSenha", [usuariosController::class,"alterarSenha"]);
 	$route->get("/deletarUsuarios", [usuariosController::class,"deletar"]);
+	$route->get("/alterarStatus", [usuariosController::class,"alterarStatus"]);
 	//Login/Logout
 	$route->get("/login", [usuariosController::class,"login"]);
 	$route->post("/login", [usuariosController::class,"login"]);

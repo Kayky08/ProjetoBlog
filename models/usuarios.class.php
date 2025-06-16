@@ -4,6 +4,7 @@
             private int $id_usuarios = 0,
             private string $nome = "",
             private string $tipo = "",
+            private string $status = "",
             private string $email = "",
             private string $senha = "",
             private array $posts = array()
@@ -17,6 +18,9 @@
         }
         public function getTipo(){
             return $this->tipo;
+        }
+        public function getStatus(){
+            return $this->status;
         }
         public function getEmail(){
             return $this->email;
@@ -36,6 +40,9 @@
         }
         public function setTipo($tipo){
             $this->tipo = $tipo;
+        }
+        public function setStatus($status){
+            $this->status = $status;
         }
         public function setEmail($email){
             $this->email = $email;

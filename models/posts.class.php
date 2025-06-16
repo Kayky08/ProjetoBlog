@@ -44,7 +44,7 @@
         public function setData($datap){
             $this->datap = $datap;
         }
-        public function setTag($tags){
+        public function setTags($tags){
             $this->tags[] = $tags;
         }
         public function setCategoria($categoria){

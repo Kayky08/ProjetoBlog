@@ -70,7 +70,7 @@
         }
 
         public function alterar($usuario){
-            $sql = "UPDATE usuarios SET nome = ?, tipo = ?, email = ?, senha = ? 
+            $sql = "UPDATE usuarios SET nome = ?, tipo = ?, email = ?
                     WHERE id_usuarios = ?";
 
             try{
@@ -78,8 +78,7 @@
                 $stm->bindValue(1,$usuario->getNome());
                 $stm->bindValue(2,$usuario->getTipo());
                 $stm->bindValue(3,$usuario->getEmail());
-                $stm->bindValue(4,$usuario->getSenha());
-                $stm->bindValue(5,$usuario->getID());
+                $stm->bindValue(4,$usuario->getID());
                 $stm->execute();
                 
                 $this->db = null;
@@ -89,6 +88,48 @@
                 echo $e->getCode();
                 echo $e->getMessage();
                 echo "Probelma ao alterar o Usuario.";
+            }
+        }
+
+        public function alterarSenha($usuario){
+            $sql = "UPDATE usuarios 
+                    SET senha = ?
+                    WHERE id_usuarios = ?";
+
+            try{
+                $stm = $this->db->prepare($sql);
+                $stm->bindValue(1,$usuario->getSenha());
+                $stm->bindValue(2,$usuario->getID());
+                $stm->execute();
+
+                $this->db = null;
+                return "Senha alterada.";
+            }
+            catch(PDOException $e){
+                echo $e->getCode();
+                echo $e->getMessage();
+                echo "Probelma ao alterar a senha.";
+            }
+        }
+
+        public function alterarStatus($usuario,$status){
+            $sql = "UPDATE usuarios 
+                    SET status = ?
+                    WHERE id_usuarios = ?";
+
+            try{
+                $stm = $this->db->prepare($sql);
+                $stm->bindValue(1,$status);
+                $stm->bindValue(2,$usuario->getID());
+                $stm->execute();
+
+                $this->db = null;
+                return "Status Alterado";
+            }
+            catch(PDOException $e){
+                echo $e->getCode();
+                echo $e->getMessage();
+                echo "Probelma ao alterar o Status.";
             }
         }
 

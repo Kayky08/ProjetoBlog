@@ -35,5 +35,7 @@
             <button type="submit" class="bg-green-400 text-white m-5 py-2 px-4 rounded-lg hover:bg-green-300 transition-colors">Enviar</button>
         </div>
     </form>
-</body>
-</html>
+
+<?php 
+    require_once "layoutRodape.php";
+?>

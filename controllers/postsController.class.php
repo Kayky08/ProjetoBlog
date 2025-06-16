@@ -11,9 +11,6 @@
         }
 
         public function listar(){
-            //Criando o Array onde vai ficar os posts de forma organizada
-            $postsAgrupados = [];
-            
             //Buscando todos os Posts no banco de dados
             $postsDAO = new postsDAO($this->conexao);
             $posts = $postsDAO->BuscarTodosPosts();
@@ -21,28 +18,6 @@
             //Buscando todas as categorias para colocar no filtro do select
             $categoriasDAO = new categoriasDAO($this->conexao);
             $categorias = $categoriasDAO->BuscarTodasCategorias();
-
-            //Organizando os posts para exibir na pagina inicial
-            foreach ($posts as $post) {
-                $id = $post->id_posts;
-
-                //Verificando se o Arry veio nulo
-                if (!isset($postsAgrupados[$id])) {
-                    //Organizando com relação as colunas do banco de dados com os nomes
-                    $postsAgrupados[$id] = [
-                        'id' => $post->id_posts,
-                        'titulo' => $post->titulo,
-                        'datap' => $post->datap,
-                        'conteudo' => $post->conteudo,
-                        'usuario' => $post->nome,
-                        'categoria' => $post->cdescritivo,
-                        'tags' => []
-                    ];
-                }
-
-                //Inserindo todas as tags no array
-                $postsAgrupados[$id]['tags'][] = $post->descritivo;
-            }
 
             require_once "views/postsListar.php";
         }
@@ -92,10 +67,6 @@
                         categoria:$categoria
                     );
 
-                    //Inserindoo post no banco de dados
-                    $postsDAO = new postsDAO($this->conexao);
-                    $post = $postsDAO->inserir($post);
-
                     //Criando o Array para inserir as tags
                     $tagsInseridas=[];
                     //Pegando as tags colocadas separadas por virgula
@@ -120,13 +91,17 @@
                     }
 
                     //Realacionando tags com o post
-                    $postsTagsDAO = new postsTagsDAO($this->conexao);
+                    //$postsTagsDAO = new postsTagsDAO($this->conexao);
                     foreach($tagsInseridas as $tag){
-                        $postsTagsDAO->relacionar($post, $tag);
+                        $post->setTags($tag);
                     }
+
+                    //Inserindoo post no banco de dados
+                    $postsDAO = new postsDAO($this->conexao);
+                    $post = $postsDAO->inserir($post);
                     
-                    header("location:/ProjetoBlog/");
-                    die();
+                    // header("location:/ProjetoBlog/");
+                    // die();
                 }
             }
             
@@ -176,27 +151,6 @@
                     //Buscando todas as categorias para colocar no filtro do select
                     $categoriasDAO = new categoriasDAO($this->conexao); 
                     $categorias = $categoriasDAO->BuscarTodasCategorias();
-
-                    foreach ($posts as $post) {
-                        $id = $post->id_posts;
-
-                        //Verificando se o Arry veio nulo
-                        if (!isset($postsAgrupados[$id])) {
-                            //Organizando com relação as colunas do banco de dados com os nomes
-                            $postsAgrupados[$id] = [
-                                'id' => $post->id_posts,
-                                'titulo' => $post->titulo,
-                                'datap' => $post->datap,
-                                'conteudo' => $post->conteudo,
-                                'usuario' => $post->nome,
-                                'categoria' => $post->cdescritivo,
-                                'tags' => []
-                            ];
-                        }
-
-                        //Inserindo todas as tags no array
-                        $postsAgrupados[$id]['tags'][] = $post->descritivo;
-                    }
 
                     require_once "views/postsListar.php";
                 }

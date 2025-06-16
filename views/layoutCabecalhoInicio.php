@@ -25,6 +25,7 @@
                         <li><a class='hover:bg-green-400 hover:text-white font-bold transition h-10 p-2 rounded-2xl' href='/ProjetoBlog/listarUsuarios'>Usuarios</a></li>
                         <li><a class='hover:bg-green-400 hover:text-white font-bold transition h-10 p-2 rounded-2xl' href='/ProjetoBlog/listarCategorias'>Categorias</a></li>
                         <li><a class='hover:bg-green-400 hover:text-white font-bold transition h-10 p-2 rounded-2xl' href='/ProjetoBlog/alterarUsuarios?id={$_SESSION['id_usuarios']}'>Editar perfil</a></li>
+                        <li><a class='hover:bg-green-400 hover:text-white font-bold transition h-10 p-2 rounded-2xl' href='/ProjetoBlog/perfil?id={$_SESSION['id_usuarios']}'>Perfil</a></li>
                         <li><a class='hover:bg-red-400 hover:text-white font-bold transition h-10 p-2 rounded-2xl' href='/ProjetoBlog/logout'>Logout</a></li>
                     </ul>
 
@@ -36,6 +37,7 @@
                     echo "
                         <ul class='flex justify-center gap-10 mt-10'>
                             <li><a class='hover:bg-green-400 hover:text-white font-bold transition h-10 p-2 rounded-2xl' href='/ProjetoBlog/alterarUsuarios?id={$_SESSION['id_usuarios']}'>Editar perfil</a></li>
+                            <li><a class='hover:bg-green-400 hover:text-white font-bold transition h-10 p-2 rounded-2xl' href='/ProjetoBlog/perfil?id={$_SESSION['id_usuarios']}'>Perfil</a></li>
                             <li><a class='hover:bg-red-400 hover:text-white font-bold transition h-10 p-2 rounded-2xl' href='/ProjetoBlog/logout'>Logout</a></li>
                         </ul>
 

@@ -8,11 +8,11 @@
     <table class="min-w-full divide-y bg-white divide-gray-200 border border-green-500">
         <thead>
             <tr class="border border-green-500 bg-green-300">
-                <th class='px-4 py-2 text-center font-semibold text-white'>Codigo</th>
+                <th class='px-4 py-2 text-center font-semibold text-white'>Código</th>
                 <th class='px-4 py-2 text-center font-semibold text-white'>Nome</th>
                 <th class='px-4 py-2 text-center font-semibold text-white'>Tipo</th>
+                <th class='px-4 py-2 text-center font-semibold text-white'>Status</th>
                 <th class='px-4 py-2 text-center font-semibold text-white'>Email</th>
-                <th class='px-4 py-2 text-center font-semibold text-white'>Senha</th>
                 <th colspan="2" class='px-4 py-2 text-center font-semibold text-white'>Ações</th>
             </tr>
         </thead>
@@ -21,15 +21,25 @@
             <?php 
             foreach($retorno as $dado){
                 echo "
-                    <tr>
-                        <td class='px-4 py-2 text-center text-sm text-gray-800'>{$dado->id_usuarios}</td>
+                    <tr class='text-center'>
+                        <td class='px-4 py-2 text-sm text-gray-800'>{$dado->id_usuarios}</td>
                         <td class='px-4 py-2 text-sm text-gray-800'>{$dado->nome}</td>
                         <td class='px-4 py-2 text-sm text-gray-800'>{$dado->tipo}</td>
+                        <td class='px-4 py-2 text-sm text-gray-800'>{$dado->status}</td>
                         <td class='px-4 py-2 text-sm text-gray-800'>{$dado->email}</td>
-                        <td class='px-4 py-2 text-sm text-gray-800'>{$dado->senha}</td>
-
+                
                         <td class='flex justify-center px-4 py-3 space-x-2'>
-                            <a class='px-3 py-1 text-sm text-white bg-blue-400 rounded hover:bg-blue-300' href='/ProjetoBlog/alterarUsuarios?id={$dado->id_usuarios}'>Alterar</a>
+
+                ";
+
+                if($dado->status == 'ativo'){
+                    echo "<a class='px-3 py-1 text-sm text-white bg-blue-400 rounded hover:bg-blue-300' href='/ProjetoBlog/alterarStatus?id={$dado->id_usuarios}'>Bloquear</a>";
+                }
+                else{
+                    echo "<a class='px-3 py-1 text-sm text-white bg-blue-400 rounded hover:bg-blue-300' href='/ProjetoBlog/alterarStatus?id={$dado->id_usuarios}'>Desbloquear</a>";
+                }
+
+                echo "            
                             <a class='px-3 py-1 text-sm text-white bg-red-400 rounded hover:bg-red-300' href='/ProjetoBlog/deletarUsuarios?id={$dado->id_usuarios}'>Excluir</a>
                         </td>
 

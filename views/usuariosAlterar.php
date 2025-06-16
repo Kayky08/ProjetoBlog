@@ -13,63 +13,26 @@
             <div class="text-center text-red-400"><?php echo $msg[0]; ?></div>
         </div>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1" for="tipo">Tipo do Usuario: </label>
-                <select class="w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" name="tipo" id="tipo">
-                    <?php
-                        if($_SESSION['tipo'] == 'administrador'){
-                            if($retorno[0]->tipo == "comum"){
-                                echo "
+            <?php 
+                if($_SESSION['tipo'] == 'administrador'){
+                    echo "
+                        <div>
+                            <label class='block text-sm font-medium text-gray-700 mb-1' for='tipo'>Tipo do Usuario: </label>
+                            <select class='w-full border border-gray-300 rounded-lg px-4 py-2 text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500' name='tipo' id='tipo'>
                                 <option  value='0'>Altere o tipo do Usuario</option>
                                 <option  value='administrador'>Administrador</option>
                                 <option  value='comum' selected>Comum</option>
-                                ";
-                            }
-                                
-                            if($retorno[0]->tipo == "administrador"){
-                                echo "
-                                <option  value='0'>Altere o tipo do Usuario</option>
-                                <option  value='administrador' selected>Administrador</option>
-                                <option  value='comum'>Comum</option>
-                                ";
-                            }
-                        }
-                        else{
-                            if($retorno[0]->tipo == "comum"){
-                                echo "
-                                <option  value='0'>Altere o tipo do Usuario</option>
-                                <option  value='comum' selected>Comum</option>
-                                ";
-                            }
-                                
-                            if($retorno[0]->tipo == "administrador"){
-                                echo "
-                                <option  value='0'>Altere o tipo do Usuario</option>
-                                <option  value='administrador' selected>Administrador</option>
-                                <option  value='comum'>Comum</option>
-                                ";
-                            }
-                        }
-                    ?>
-                </select>
-                <div class="text-center text-red-400"><?php echo $msg[1]; ?></div>
-            </div>
+                            </select>
+                            <div class='text-center text-red-400'>{$msg[1]}</div>
+                        </div>
+                    ";
+                }
+            ?>
 
         <div>
             <label for="email" class="block text-sm font-medium text-gray-600">E-mail:</label>
             <input type="email" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" id="email" name="email" value="<?php echo $retorno[0]->email;?>">
             <div class="text-center text-red-400"><?php echo $msg[2]; ?></div>
-        </div>
-
-        <div>
-            <label for="senha" class="block text-sm font-medium text-gray-600">Senha:</label>
-            <input type="password" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" id="senha" name="senha">
-        </div>
-
-        <div>
-            <label for="vsenha" class="block text-sm font-medium text-gray-600">Confirme a senha:</label>
-            <input type="password" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" id="vsenha" name="vsenha">
-            <div class="text-center text-red-400"><?php echo $msg[3]; ?></div>
         </div>
 
         <div class="flex justify-center">

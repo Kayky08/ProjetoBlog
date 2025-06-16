@@ -48,25 +48,35 @@
                 }
 
                 if(!$erro){
-
-                    //Criando o objeto com os dados do Post
-                    $usuario = new Usuarios(
-                        nome:$_POST['nome'],
-                        tipo:'comum',
-                        email:$_POST['email'],
-                        senha:md5($_POST['senha'])
-                    );
-
-                    //Inserindo o usuaio no banco de dados
-                    $usuarioDAO = new usuariosDAO($this->conexao);
-                    $usuarioDAO->inserir($usuario);
-
                     //Verificanção para saber onde direcionar o usuario
                     if($_SESSION['tipo'] == "administrador"){
+                        //Criando o objeto com os dados do Post
+                        $usuario = new Usuarios(
+                            nome:$_POST['nome'],
+                            tipo:'administrador',
+                            email:$_POST['email'],
+                            senha:md5($_POST['senha'])
+                        );
+
+                        //Inserindo o usuaio no banco de dados
+                        $usuarioDAO = new usuariosDAO($this->conexao);
+                        $usuarioDAO->inserir($usuario);
+
                         header("location:/ProjetoBlog/listarUsuarios");
                         die();
                     }
                     else{
+                        $usuario = new Usuarios(
+                            nome:$_POST['nome'],
+                            tipo:'comum',
+                            email:$_POST['email'],
+                            senha:md5($_POST['senha'])
+                        );
+
+                        //Inserindo o usuaio no banco de dados
+                        $usuarioDAO = new usuariosDAO($this->conexao);
+                        $usuarioDAO->inserir($usuario);
+
                         header("location:/ProjetoBlog/login");
                         die();
                     }
@@ -98,7 +108,7 @@
                     $erro = true;
                     $msg[0] = "Preencha o nome de Usuario.";
                 }
-                if($_POST['tipo'] == 0){
+                if($_POST['tipo'] == 0 && $_SESSION['tipo'] == 'administrador'){
                     $erro = true;
                     $msg[1] = "Escolha o tipo de Usuário.";
                 }
@@ -106,45 +116,37 @@
                     $erro = true;
                     $msg[2] = "Preencha o nome de Usuario.";
                 }
-                if(!empty($_POST['senha']) || !empty($_POST['vsenha'])){
-                    if($_POST['senha'] != $_POST['vsenha']){
-                        $erro = true;
-                        $msg[3] = "Por favor insira a senhas iguais.";
-                    }
-                }
 
                 if(!$erro){
-                    //Verificando se o usuario trocou de senha
-                    $senha = null;
-                    if(!empty($_POST['senha'])){
-                        $senha = md5($_POST['senha']);
-                    }
-
-                    //Criando um objeto com os dados do usuario atual
-                    $usuario_Atual = new Usuarios(id_usuarios:$_GET['id']);
-                    $usuarioDAO = new usuariosDAO($this->conexao);
-                    $usuarioAtual = $usuarioDAO->buscarUmUsuario($usuario_Atual);
-
-                    $usuario = new Usuarios(
-                        id_usuarios:$_POST['id'],
-                        tipo:$_POST['tipo'],
-                        nome:$_POST['nome'],
-                        email:$_POST['email'],
-                        //Verificando se senha é nulo, se não inseri a mesma senha
-                        senha: $senha ?? $usuarioAtual[0]->senha
-                    );
-
-                    //Alterando os dados no banco de dados
-                    $usuarioDAO->alterar($usuario);
-
                     //Verificanção para saber onde direcionar o usuario
                     if($_SESSION['tipo'] == "administrador"){
+                        $usuario = new Usuarios(
+                            id_usuarios:$_POST['id'],
+                            tipo:"administrador",
+                            nome:$_POST['nome'],
+                            email:$_POST['email']
+                        );
+
+                        //Alterando os dados no banco de dados
+                        $usuarioDAO->alterar($usuario);
+
                         $_SESSION['nome'] = $_POST['nome']; 
                         $_SESSION['email'] = $_POST['email'];
+
                         header("location:/ProjetoBlog/listarUsuarios");
                         die();
                     }
                     else{
+                        $usuario = new Usuarios(
+                            id_usuarios:$_POST['id'],
+                            tipo:'comum',
+                            nome:$_POST['nome'],
+                            email:$_POST['email']
+                        );
+
+                        //Alterando os dados no banco de dados
+                        $usuarioDAO->alterar($usuario);
+
                         $_SESSION['nome'] = $_POST['nome']; 
                         $_SESSION['email'] = $_POST['email'];
                     
@@ -155,6 +157,45 @@
             }
 
             require_once "views/usuariosAlterar.php";
+        }
+
+        public function alterarSenha(){
+            if(!isset($_SESSION)) session_start();
+
+            $msg = ['',''];
+            $erro = false;
+
+            if(isset($_GET)){
+                $usuario = new Usuarios(id_usuarios:$_GET['id']);
+                $usuarioDAO = new usuariosDAO($this->conexao);
+                $retorno = $usuarioDAO->buscarUmUsuario($usuario);
+            }
+
+            if($_POST){
+                if(empty($_POST['senha'])){
+                    $erro = true;
+                    $msg[0] = "Preencha a senha.";
+                }
+                if(empty($_POST['vsenha'])){
+                    $erro = true;
+                    $msg[1] = "Preencha a verificação da senha.";
+                }
+                if($_POST['senha'] != $_POST['vsenha']){
+                    $erro = true;
+                    $msg[1] = "Verifique se as senha são iguais.";
+                }
+
+                if(!$erro){
+                    $usuario = new Usuarios(id_usuarios:$_POST['id'], senha:md5($_POST['senha']));
+                    $usuarioDAO = new usuariosDAO($this->conexao);
+                    $usuarioDAO->alterarSenha($usuario);
+
+                    header("location:/ProjetoBlog/perfil");
+                    die();
+                }
+            }
+
+            require_once "views/usuariosAlterarSenha.php";
         }
 
         public function deletar(){
@@ -196,6 +237,10 @@
             }
         }
 
+        public function perfil(){
+            require_once "views/usuariosPerfil.php";
+        }
+
         public function login(){
             $msg = ["","",""];
 
@@ -220,19 +265,24 @@
                     
                     //Verificando se o usuario esta cadastrado no banco de dados
                     $usuarioDAO = new usuariosDAO($this->conexao);
-                    $retorno = $usuarioDAO->verificarUsuario($usuario);                   
+                    $retorno = $usuarioDAO->verificarUsuario($usuario);                  
 
                     //Verificando se os dados não estão vazios
                     if(!empty($retorno)){
-                        //Criando uma sessão com os dados do usaurio
-                        session_start();
-                        $_SESSION['id_usuarios'] = $retorno[0]->id_usuarios;
-                        $_SESSION['tipo'] = $retorno[0]->tipo;
-                        $_SESSION['nome'] = $retorno[0]->nome;
-                        $_SESSION['email'] = $retorno[0]->email;
+                        if($retorno[0]->status == 'ativo'){
+                            //Criando uma sessão com os dados do usaurio
+                            session_start();
+                            $_SESSION['id_usuarios'] = $retorno[0]->id_usuarios;
+                            $_SESSION['tipo'] = $retorno[0]->tipo;
+                            $_SESSION['nome'] = $retorno[0]->nome;
+                            $_SESSION['email'] = $retorno[0]->email;
 
-                        header("location:/ProjetoBlog/");
-                        die();
+                            header("location:/ProjetoBlog/");
+                            die();
+                        }
+                        else{
+                            $msg[2] = "Usuario Bloqueado."; 
+                        }
                     }
                     else{
                         $msg[2] = "Confira seu E-mail/Senha."; 
@@ -253,6 +303,27 @@
 
             //Redirecionando para a pagina inicial
 			header("location:/ProjetoBlog/");
+            die();
+        }
+
+        public function alterarStatus(){
+            if(isset($_GET)){
+                $usuario = new Usuarios(id_usuarios:$_GET['id']);
+                $usuarioDAO = new usuariosDAO($this->conexao);
+                $retorno = $usuarioDAO->buscarUmUsuario($usuario);
+
+                //verificando se o retorno esta vazio
+                if(!empty($retorno)){
+                    //verificando se o usuario esta ativo ou bloqueado
+                    $novoStatus = $retorno[0]->status === 'ativo' ? 'bloqueado' : 'ativo';
+
+                    //altera o status para o novo
+                    $usuarioDAO->alterarStatus($usuario, $novoStatus);
+                }
+
+                header("location:/ProjetoBlog/listarUsuarios");
+                die();
+            }
         }
     }
 ?>
