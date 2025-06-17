@@ -43,7 +43,7 @@
 
             echo "
                     <div class='flex justify-between'>    
-                        <p class='font-bold uppercase'>{$post->usuario}</p>
+                        <p class='font-bold'>{$post->usuario}</p>
                         <p>{$dataFormatada}</p>
                     </div>
 

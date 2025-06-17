@@ -214,13 +214,13 @@
                     $post = new Posts(id_posts: $relacao->id_posts);
 
                     //Bucando o post que esta relacionado com o usuario
-                    $postsTagsDAO = new postsTagsDAO($this->conexao);
-                    $relacoes = $postsTagsDAO->buscarPorPost($post);
+                    $tagsDAO = new tagsDAO($this->conexao);
+                    $tags = $tagsDAO->buscarPorPost($post);
 
-                    //Deletando as relações das tags com o post
-                    foreach($relacoes as $relacao){
-                        $postsTags = new postsTags(id_posts_tags: $relacao->id_posts_tags);
-                        $postsTagsDAO->deletar($postsTags);
+                    //Deletando todas as relações que o post tem
+                    foreach($tags as $tag){
+                        $tags = new Tags(id_tags: $tag->id_tags);
+                        $tagsDAO->deletar($tags);
                     }
 
                     //Deletando o post

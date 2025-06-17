@@ -41,6 +41,23 @@
                 }
             }
 
+            public function buscarPorPost($post){
+                $sql = "SELECT * FROM tags WHERE id_posts = ?";
+
+                try{
+                    $stm = $this->db->prepare($sql);
+                    $stm->bindValue(1,$post->getID());
+                    $stm->execute();
+
+                    return $stm->fetchAll(PDO::FETCH_OBJ);
+                }
+                catch(PDOException $e){
+                    echo $e->getCode();
+                    echo $e->getMessage();
+                    echo "Falha ao buscar relações pelo Post.";
+                }
+            }
+
             public function inserir($tag){
                 $sql = "INSERT INTO tags (descritivo) VALUES (?)";
 
@@ -69,10 +86,9 @@
                 try{
                     $stm = $this->db->prepare($sql);
                     $stm->bindValue(1,$tag->getDescritivo());
-                    $stm->bindValue(3,$tag->getID());
+                    $stm->bindValue(2,$tag->getID());
                     $stm->execute();
                     
-                    $this->db = null;
                     return "Tag alterada com sucesso.";
                 }
                 catch (PDOException $e){
@@ -90,7 +106,6 @@
                     $stm->bindValue(1,$tag->getID());
                     $stm->execute();
                     
-                    $this->db = null;
                     return "Tag deletada com sucesso.";
                 }
                 catch (PDOException $e){

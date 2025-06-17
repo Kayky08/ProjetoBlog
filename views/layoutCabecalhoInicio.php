@@ -41,7 +41,7 @@
                             <li><a class='hover:bg-red-400 hover:text-white font-bold transition h-10 p-2 rounded-2xl' href='/ProjetoBlog/logout'>Logout</a></li>
                         </ul>
 
-                    <div class='p-10'><p class='text-5xl text-center'>Olá, <strong class='text-green-400 uppercase'>{$_SESSION['nome']}</strong></p></div>
+                    <div class='p-10'><p class='text-5xl text-center'>Olá, <strong class='text-green-400'>{$_SESSION['nome']}</strong></p></div>
 
 
                     <a class='fixed bottom-9 text-3xl right-55 bg-green-400 text-white p-10 rounded-full shadow-lg hover:bg-green-300 transition-colors' href='/ProjetoBlog/inserirPosts'>+</a>
