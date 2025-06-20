@@ -49,6 +49,10 @@
 
                     <h2 class='text-green-400 text-3xl font-bold mb-6 text-center m-5'>{$post->titulo}</h2>
 
+                    <div class='flex justify-center'>
+                        <img class='m-5 rounded-xl' src='{$post->imagem}'>
+                    </div>
+
                     <p class='mb-6 text-justify'>{$post->conteudo}</p>
                 
                     <p class='text-green-400'><strong>Tags: </strong>{$post->tags}</p>

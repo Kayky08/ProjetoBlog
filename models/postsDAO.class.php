@@ -5,6 +5,7 @@
         public function BuscarTodosPosts(){
             $sql = "SELECT p.id_posts, p.titulo, p.datap, 
                            p.conteudo, u.nome AS usuario,
+                           p.imagem,
                            c.cdescritivo as categoria,
                            GROUP_CONCAT(t.descritivo SEPARATOR ', ') AS tags
                     FROM posts p
@@ -37,6 +38,7 @@
             $sql = "SELECT p.id_posts, p.titulo, p.datap, 
                            p.conteudo, u.nome AS usuario,
                            c.cdescritivo as categoria,
+                           p.imagem,
                            GROUP_CONCAT(t.descritivo SEPARATOR ', ') AS tags
                     FROM posts p
                     INNER JOIN tags t 
@@ -65,7 +67,22 @@
         }
 
         public function buscarPorUsuario($usuario){
-            $sql = "SELECT * FROM posts WHERE id_usuarios = ?";
+            $sql = "SELECT p.id_posts, p.titulo, p.datap, 
+                           p.conteudo, u.nome AS usuario,
+                           c.cdescritivo as categoria,
+                           p.imagem,
+                           GROUP_CONCAT(t.descritivo SEPARATOR ', ') AS tags
+                    FROM posts p
+                    INNER JOIN tags t 
+                    ON t.id_posts = p.id_posts
+                    INNER JOIN usuarios u
+                    ON u.id_usuarios = p.id_usuarios
+                    INNER JOIN categorias c
+                    ON p.id_categorias = c.id_categorias
+                    WHERE p.id_usuarios = ?
+                    GROUP BY p.id_posts
+                    ORDER BY p.id_posts DESC
+                    ";
 
             try{
                 $stm = $this->db->prepare($sql);
@@ -85,6 +102,7 @@
             $sql = "SELECT p.id_posts, p.titulo, p.datap, 
                            p.conteudo, u.nome AS usuario,
                            c.cdescritivo as categoria,
+                           p.imagem,
                            GROUP_CONCAT(t.descritivo SEPARATOR ', ') AS tags
                     FROM posts p
                     INNER JOIN tags t 
@@ -113,7 +131,7 @@
         }
 
         public function inserir($post){
-            $sql = "INSERT INTO posts (titulo,conteudo,datap,id_usuarios,id_categorias) VALUES (?,?,?,?,?)";
+            $sql = "INSERT INTO posts (titulo,conteudo,datap,id_usuarios,id_categorias,imagem) VALUES (?,?,?,?,?,?)";
 
             //Iniciando a transação, para garantir que eu possa utilizar o rollback caso uma das operações falhe
             $this->db->beginTransaction();
@@ -125,6 +143,7 @@
                 $stm->bindValue(3,$post->getData());
                 $stm->bindValue(4,$post->getUsuario()->getID());
                 $stm->bindValue(5,$post->getCategoria()->getID());
+                $stm->bindValue(6,$post->getImagem());
                 $stm->execute();
             }
             catch(PDOException $e){

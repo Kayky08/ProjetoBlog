@@ -7,6 +7,7 @@
             private string $status = "",
             private string $email = "",
             private string $senha = "",
+            private string $imagem = "",
             private array $posts = array()
         ){}
 
@@ -31,6 +32,9 @@
         public function getPosts(){
             return $this->posts;
         }
+        public function getImagem(){
+            return $this->imagem;
+        }
 
         public function setID($id_usuarios){
             $this->id_usuarios = $id_usuarios;
@@ -52,6 +56,9 @@
         }
         public function setPosts($posts){
             $this->posts[] = $posts;
+        }
+        public function setImagem($imagem){
+            $this->imagem = $imagem;
         }
     }
 ?>

@@ -20,8 +20,9 @@
             //Iniciando a sessão para exibir o header correspondente
             if(!isset($_SESSION)) session_start();
 
-            $msg = ["","","",""];
+            $msg = ["","","","",""];
             $erro = false;
+            $tiposImagem = ["image/png","image/jpeg"];
 
             //Verificando se veio dados via Post
             if($_POST){
@@ -46,16 +47,38 @@
                     $erro = true;
                     $msg[3] = "Por favor insira a senhas iguais.";
                 }
+                if($_FILES["imagem"]["name"] == "")
+				{
+					$msg[4] = "Escolha uma Imagem para inserir no Usuario";
+					$erro = true;
+				}
+				else if(!in_array($_FILES["imagem"]["type"], $tiposImagem))
+				{
+					$msg[4] = "Formato de imagem não suportado";
+					$erro = true;
+				}
 
                 if(!$erro){
                     //Verificanção para saber onde direcionar o usuario
                     if($_SESSION['tipo'] == "administrador"){
+                        //Cria um nome unico para a imagem para que não haja conflitos nos nomes
+                        $nomeImagem = uniqid() . "_" . $_FILES['imagem']['name'];
+                        //Cria o caminho onde a imagem vai ser salva
+                        $caminhoImagem = "src/img/" . $nomeImagem;
+
+                        //Verifica se foi feito o upload da imagem para o diretorio certo se não ela retorna o erro
+                        if(!move_uploaded_file($_FILES['imagem']['tmp_name'], $caminhoImagem)){
+                            $erro = true;
+                            $msg[4] = "Erro ao salvar a imagem.";
+                        }
+
                         //Criando o objeto com os dados do Post
                         $usuario = new Usuarios(
                             nome:$_POST['nome'],
                             tipo:'administrador',
                             email:$_POST['email'],
-                            senha:md5($_POST['senha'])
+                            senha:md5($_POST['senha']),
+                            imagem: $caminhoImagem
                         );
 
                         //Inserindo o usuaio no banco de dados
@@ -65,21 +88,33 @@
                         header("location:/ProjetoBlog/listarUsuarios");
                         die();
                     }
-                    else{
-                        $usuario = new Usuarios(
-                            nome:$_POST['nome'],
-                            tipo:'comum',
-                            email:$_POST['email'],
-                            senha:md5($_POST['senha'])
-                        );
 
-                        //Inserindo o usuaio no banco de dados
-                        $usuarioDAO = new usuariosDAO($this->conexao);
-                        $usuarioDAO->inserir($usuario);
+                    //Cria um nome unico para a imagem para que não haja conflitos nos nomes
+                    $nomeImagem = uniqid() . "_" . $_FILES['imagem']['name'];
+                    //Cria o caminho onde a imagem vai ser salva
+                    $caminhoImagem = "src/img/" . $nomeImagem;
 
-                        header("location:/ProjetoBlog/login");
-                        die();
+                    //Verifica se foi feito o upload da imagem para o diretorio certo se não ela retorna o erro
+                    if(!move_uploaded_file($_FILES['imagem']['tmp_name'], $caminhoImagem)){
+                        $erro = true;
+                        $msg[4] = "Erro ao salvar a imagem.";
                     }
+
+                    $usuario = new Usuarios(
+                        nome:$_POST['nome'],
+                        tipo:'comum',
+                        email:$_POST['email'],
+                        senha:md5($_POST['senha']),
+                        imagem: $caminhoImagem
+                    );
+
+                    //Inserindo o usuaio no banco de dados
+                    $usuarioDAO = new usuariosDAO($this->conexao);
+                    $usuarioDAO->inserir($usuario);
+
+                    //header("location:/ProjetoBlog/login");
+                    //die();
+                
                 }
             }
 
@@ -238,6 +273,18 @@
         }
 
         public function perfil(){
+            if(!isset($_SESSION)) session_start();
+
+            $usuario = new Usuarios(id_usuarios:$_SESSION['id_usuarios']);
+
+            //Buscando todos os Posts no banco de dados
+            $postsDAO = new postsDAO($this->conexao);
+            $posts = $postsDAO->buscarPorUsuario($usuario);
+
+            //Buscando todas as categorias para colocar no filtro do select
+            $categoriasDAO = new categoriasDAO($this->conexao);
+            $categorias = $categoriasDAO->BuscarTodasCategorias();
+
             require_once "views/usuariosPerfil.php";
         }
 

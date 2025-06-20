@@ -46,8 +46,8 @@
         }
 
         public function inserir($usuario){
-            $sql = "INSERT INTO usuarios (nome,tipo,email,senha) 
-                    VALUES (?,?,?,?)";
+            $sql = "INSERT INTO usuarios (nome,tipo,email,senha,imagem) 
+                    VALUES (?,?,?,?,?)";
 
             try{
                 $stm = $this->db->prepare($sql);
@@ -55,6 +55,7 @@
                 $stm->bindValue(2,$usuario->getTipo());
                 $stm->bindValue(3,$usuario->getEmail());
                 $stm->bindValue(4,$usuario->getSenha());
+                $stm->bindValue(5,$usuario->getImagem());
                 $stm->execute();
                 
                 $id = $this->db->lastInsertId();

@@ -30,8 +30,9 @@
             $categoriasDAO = new categoriasDAO($this->conexao);
             $categorias = $categoriasDAO->BuscarTodasCategorias();
 
-            $msg = ["","","",""];
+        $msg = ["","","","",""];
             $erro = false;
+            $tiposImagem = ["image/png","image/jpeg"];
 
             //Verificando se recebeu os dados via Post
             if($_POST){
@@ -51,8 +52,29 @@
                     $erro = true;
                     $msg[3] = "Escolha uma Categoria.";
                 }
+                if($_FILES["imagem"]["name"] == "")
+				{
+					$msg[4] = "Escolha uma Imagem para inserir no post";
+					$erro = true;
+				}
+				else if(!in_array($_FILES["imagem"]["type"], $tiposImagem))
+				{
+					$msg[4] = "Formato de imagem não suportado";
+					$erro = true;
+				}
 
                 if(!$erro){
+                    //Cria um nome unico para a imagem para que não haja conflitos nos nomes
+                    $nomeImagem = uniqid() . "_" . $_FILES['imagem']['name'];
+                    //Cria o caminho onde a imagem vai ser salva
+                    $caminhoImagem = "src/img/" . $nomeImagem;
+
+                    //Verifica se foi feito o upload da imagem para o diretorio certo se não ela retorna o erro
+                    if(!move_uploaded_file($_FILES['imagem']['tmp_name'], $caminhoImagem)){
+                        $erro = true;
+                        $msg[4] = "Erro ao salvar a imagem.";
+                    }
+
                     //Buscando o usuario atual para inserir no post
                     $usuario = new Usuarios(id_usuarios: $_SESSION['id_usuarios']);
                     //Buscando a categoria selecionada por meio do select para inserir no post
@@ -65,6 +87,8 @@
                         datap: date("Y-m-d H:i:s"),
                         usuario:$usuario,
                         categoria:$categoria,
+                        //Salva o caminho da imagem
+                        imagem: $caminhoImagem,
                         tags:explode(',', $_POST['tags'])
                     );
 

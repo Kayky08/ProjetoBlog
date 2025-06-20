@@ -5,6 +5,7 @@
             private string $titulo = "",
             private string $conteudo = "",
             private string $datap = "",
+            private string $imagem = "",
             private array $tags = array(),
             private $categoria = null,
             private $usuario = null,
@@ -21,6 +22,9 @@
         }
         public function getData(){
             return $this->datap;
+        }
+        public function getImagem(){
+            return $this->imagem;
         }
         public function getTags(){
             return $this->tags;
@@ -43,6 +47,9 @@
         }
         public function setData($datap){
             $this->datap = $datap;
+        }
+        public function setImagem($imagem){
+            $this->imagem = $imagem;
         }
         public function setTags($tags){
             $this->tags[] = $tags;
