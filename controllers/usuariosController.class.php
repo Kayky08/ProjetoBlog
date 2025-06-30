@@ -58,7 +58,30 @@
 					$erro = true;
 				}
 
+                //Buscando todos os nomes e emails no banco de dados
+                $usuarioDAO = new usuariosDAO($this->conexao);
+                $emails = $usuarioDAO->buscarTodosEmails();
+                $nomes = $usuarioDAO->buscarTodosNomes();
+
+                //Verificando se o nome é igual
+                foreach($nomes as $nome){
+                    if($nome->nome == $_POST['nome']){
+                        $erro = true;
+                        $msg[0] = "Nome já cadastrado.";
+                    }
+                }
+
+                //Verificando se o email é igual
+                foreach($emails as $email){
+                    if($email->email == $_POST['email']){
+                        $erro = true;
+                        $msg[1] = "E-mail já cadastrado.";
+                    }
+                }
+
+
                 if(!$erro){
+                    
                     //Verificanção para saber onde direcionar o usuario
                     if($_SESSION['tipo'] == "administrador"){
                         //Cria um nome unico para a imagem para que não haja conflitos nos nomes
@@ -82,7 +105,6 @@
                         );
 
                         //Inserindo o usuaio no banco de dados
-                        $usuarioDAO = new usuariosDAO($this->conexao);
                         $usuarioDAO->inserir($usuario);
 
                         header("location:/ProjetoBlog/listarUsuarios");
@@ -112,9 +134,14 @@
                     $usuarioDAO = new usuariosDAO($this->conexao);
                     $usuarioDAO->inserir($usuario);
 
-                    //header("location:/ProjetoBlog/login");
-                    //die();
-                
+                    if($_SESSION['tipo'] == 'administrador'){
+                        header("location:/ProjetoBlog/listarUsuarios");
+                        die();
+                    }
+                    else{
+                        header("location:/ProjetoBlog/login");
+                        die();
+                    }
                 }
             }
 
@@ -127,6 +154,7 @@
 
             $msg = ["","","",""];
             $erro = false;
+            $tiposImagem = ["image/png","image/jpeg"];
             
             //Verificando se o metodo Get veio com dados
             if(isset($_GET)){
@@ -137,57 +165,85 @@
             }
             
             //Verificando se recebeu os dados via Post
-            if($_POST){                
+            if($_POST){
+                $caminhoImagem = $_POST['imagemAtual'];
+                
                 //Verificando se os campos não estão vazios
                 if(empty($_POST['nome'])){
                     $erro = true;
                     $msg[0] = "Preencha o nome de Usuario.";
                 }
-                if($_POST['tipo'] == 0 && $_SESSION['tipo'] == 'administrador'){
-                    $erro = true;
-                    $msg[1] = "Escolha o tipo de Usuário.";
-                }
                 if(empty($_POST['email'])){
                     $erro = true;
                     $msg[2] = "Preencha o nome de Usuario.";
                 }
+                if($_FILES["imagem"]["name"] != "")
+				{
+					if(!in_array($_FILES["imagem"]["type"], $tiposImagem)){
+					    $msg[3] = "Formato de imagem não suportado";
+					    $erro = true;
+				    }
+				}
+
+                //Buscando todos os nomes e emails no banco de dados
+                $usuarioDAO = new usuariosDAO($this->conexao);
+                $emails = $usuarioDAO->buscarTodosEmails();
+                $nomes = $usuarioDAO->buscarTodosNomes();
+
+                //Verificando se o nome é igual
+                foreach($nomes as $nome){
+                    if($nome->nome == $_POST['nome']){
+                        $erro = true;
+                        $msg[0] = "Nome já cadastrado.";
+                    }
+                }
+
+                //Verificando se o email é igual
+                foreach($emails as $email){
+                    if($email->email == $_POST['email']){
+                        $erro = true;
+                        $msg[1] = "E-mail já cadastrado.";
+                    }
+                }
+
 
                 if(!$erro){
-                    //Verificanção para saber onde direcionar o usuario
-                    if($_SESSION['tipo'] == "administrador"){
-                        $usuario = new Usuarios(
-                            id_usuarios:$_POST['id'],
-                            tipo:"administrador",
-                            nome:$_POST['nome'],
-                            email:$_POST['email']
-                        );
+                    if($_FILES['imagem']['name'] != ""){
+                        //Cria um nome unico para a imagem para que não haja conflitos nos nomes
+                        $img = uniqid() . "_" . $_FILES['imagem']['name'];
+                        //Cria o caminho onde a imagem vai ser salva
+                        $caminhoImagem = "src/img/" . $img;
 
-                        //Alterando os dados no banco de dados
-                        $usuarioDAO->alterar($usuario);
-
-                        $_SESSION['nome'] = $_POST['nome']; 
-                        $_SESSION['email'] = $_POST['email'];
-
-                        header("location:/ProjetoBlog/listarUsuarios");
-                        die();
+                        //Verifica se foi feito o upload da imagem para o diretorio certo se não ela retorna o erro
+                        if(!move_uploaded_file($_FILES['imagem']['tmp_name'], $caminhoImagem)){
+                            $erro = true;
+                            $msg[4] = "Erro ao salvar a imagem.";
+                        }
+                        
+                        if(unlink($img)) {
+                            echo "Arquivo apagado com sucesso.";
+                        } else {
+                            echo "Erro ao apagar o arquivo.";
+                        }
                     }
-                    else{
-                        $usuario = new Usuarios(
-                            id_usuarios:$_POST['id'],
-                            tipo:'comum',
-                            nome:$_POST['nome'],
-                            email:$_POST['email']
-                        );
 
-                        //Alterando os dados no banco de dados
-                        $usuarioDAO->alterar($usuario);
+                    $usuario = new Usuarios(
+                        id_usuarios:$_POST['id'],
+                        tipo:'comum',
+                        nome:$_POST['nome'],
+                        email:$_POST['email'],
+                        imagem: $caminhoImagem
+                    );
 
-                        $_SESSION['nome'] = $_POST['nome']; 
-                        $_SESSION['email'] = $_POST['email'];
-                    
-                        header("location:/ProjetoBlog/");
-                        die();
-                    }
+                    //Alterando os dados no banco de dados
+                    $usuarioDAO->alterar($usuario);
+
+                    $_SESSION['nome'] = $_POST['nome']; 
+                    $_SESSION['email'] = $_POST['email'];
+                    $_SESSION['imagem'] = $caminhoImagem;
+                
+                    header("location:/ProjetoBlog/perfil");
+                    die();
                 }
             }
 
@@ -323,6 +379,7 @@
                             $_SESSION['tipo'] = $retorno[0]->tipo;
                             $_SESSION['nome'] = $retorno[0]->nome;
                             $_SESSION['email'] = $retorno[0]->email;
+                            $_SESSION['imagem'] = $retorno[0]->imagem;
 
                             header("location:/ProjetoBlog/");
                             die();

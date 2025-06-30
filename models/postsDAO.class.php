@@ -5,8 +5,8 @@
         public function BuscarTodosPosts(){
             $sql = "SELECT p.id_posts, p.titulo, p.datap, 
                            p.conteudo, u.nome AS usuario,
-                           p.imagem,
-                           c.cdescritivo as categoria,
+                           p.imagem, u.imagem AS fotoUsuario,
+                           c.cdescritivo AS categoria,
                            GROUP_CONCAT(t.descritivo SEPARATOR ', ') AS tags
                     FROM posts p
                     INNER JOIN tags t 
@@ -38,7 +38,7 @@
             $sql = "SELECT p.id_posts, p.titulo, p.datap, 
                            p.conteudo, u.nome AS usuario,
                            c.cdescritivo as categoria,
-                           p.imagem,
+                           p.imagem, u.imagem AS fotoUsuario,
                            GROUP_CONCAT(t.descritivo SEPARATOR ', ') AS tags
                     FROM posts p
                     INNER JOIN tags t 
@@ -70,7 +70,7 @@
             $sql = "SELECT p.id_posts, p.titulo, p.datap, 
                            p.conteudo, u.nome AS usuario,
                            c.cdescritivo as categoria,
-                           p.imagem,
+                           p.imagem, u.imagem AS fotoUsuario,
                            GROUP_CONCAT(t.descritivo SEPARATOR ', ') AS tags
                     FROM posts p
                     INNER JOIN tags t 
@@ -102,7 +102,7 @@
             $sql = "SELECT p.id_posts, p.titulo, p.datap, 
                            p.conteudo, u.nome AS usuario,
                            c.cdescritivo as categoria,
-                           p.imagem,
+                           p.imagem, u.imagem AS fotoUsuario,
                            GROUP_CONCAT(t.descritivo SEPARATOR ', ') AS tags
                     FROM posts p
                     INNER JOIN tags t 
@@ -186,7 +186,7 @@
 
         public function alterar($post){
             $sql = "UPDATE posts 
-                    SET titulo = ?, conteudo = ?, datap = ?, id_categorias = ? 
+                    SET titulo = ?, conteudo = ?, datap = ?, id_categorias = ?, imagem = ? 
                     WHERE id_posts = ?";
 
             $this->db->beginTransaction();
@@ -197,7 +197,8 @@
                 $stm->bindValue(2,$post->getConteudo());
                 $stm->bindValue(3,$post->getData());
                 $stm->bindValue(4,$post->getCategoria()->getID());
-                $stm->bindValue(5,$post->getID());
+                $stm->bindValue(5,$post->getImagem());
+                $stm->bindValue(6,$post->getID());
                 $stm->execute();
             }
             catch(PDOException $e){

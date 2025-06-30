@@ -1,7 +1,7 @@
 <?php 
     require_once "layoutCabecalho.php";
 ?>
-    <form class="max-w-4xl mx-auto mt-10 mb-10 bg-white p-8 rounded-2xl shadow-md" action="#" method="post">
+    <form class="max-w-4xl mx-auto mt-10 mb-10 bg-white p-8 rounded-2xl shadow-md" action="#" method="post" enctype="multipart/form-data">
         <h1 class="text-center text-3xl mb-5 font-bold text-green-400">Edite um Post</h1>
         
         <input type="hidden" name="id" id="id" value="<?php echo $retorno[0]->id_posts; ?>">
@@ -35,6 +35,16 @@
         <label class="block text-sm font-medium text-gray-600" for="tags">Tag (separadas por virgula):</label>
         <input class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" type="text" id="tags" name="tags" value="<?php echo $retorno[0]->tags;?>">
         <div class="text-center text-red-400"><?php echo $msg[2]; ?></div>
+
+        <input type="hidden" name="imagemAtual" id="imagemAtual" value="<?php echo $retorno[0]->imagem;?>">
+
+        <div class="flex justify-center">
+            <label class="m-5 cursor-pointer bg-green-400 hover:bg-green-300 text-white font-bold py-2 px-4 rounded-lg" for="imagem">Imagem: 
+            <input type="file" name="imagem" id="imagem" accept="image/*">
+            </label>
+        </div>
+
+        <div class="text-center text-red-400"><?php echo $msg[4]; ?></div>
 
         <div class="flex justify-center">
             <button type="submit" class="bg-green-400 text-white m-5 py-2 px-4 rounded-lg hover:bg-green-300 transition-colors">Enviar</button>

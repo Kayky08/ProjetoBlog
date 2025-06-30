@@ -45,6 +45,44 @@
             }
         }
 
+        public function buscarTodosEmails(){
+            $sql = "SELECT email 
+                    FROM usuarios";
+
+            try{
+                $stm = $this->db->prepare($sql);
+                $stm->execute();
+                
+                return $stm->fetchAll(PDO::FETCH_OBJ);
+            }
+            catch (PDOException $e){
+                $this->db = null;
+
+                echo $e->getCode();
+                echo $e->getMessage();
+                echo "Probelma ao buscar os E-mails.";
+            }
+        }
+
+        public function buscarTodosNomes(){
+            $sql = "SELECT nome 
+                    FROM usuarios";
+
+            try{
+                $stm = $this->db->prepare($sql);
+                $stm->execute();
+                
+                return $stm->fetchAll(PDO::FETCH_OBJ);
+            }
+            catch (PDOException $e){
+                $this->db = null;
+
+                echo $e->getCode();
+                echo $e->getMessage();
+                echo "Probelma ao buscar os E-mails.";
+            }
+        }
+
         public function inserir($usuario){
             $sql = "INSERT INTO usuarios (nome,tipo,email,senha,imagem) 
                     VALUES (?,?,?,?,?)";
@@ -71,7 +109,7 @@
         }
 
         public function alterar($usuario){
-            $sql = "UPDATE usuarios SET nome = ?, tipo = ?, email = ?
+            $sql = "UPDATE usuarios SET nome = ?, tipo = ?, email = ?, imagem = ?
                     WHERE id_usuarios = ?";
 
             try{
@@ -79,7 +117,8 @@
                 $stm->bindValue(1,$usuario->getNome());
                 $stm->bindValue(2,$usuario->getTipo());
                 $stm->bindValue(3,$usuario->getEmail());
-                $stm->bindValue(4,$usuario->getID());
+                $stm->bindValue(4,$usuario->getImagem());
+                $stm->bindValue(5,$usuario->getID());
                 $stm->execute();
                 
                 $this->db = null;

@@ -1,6 +1,5 @@
 <?php 
     require_once "layoutCabecalhoInicio.php";
-
 ?>
     <form class="max-w-4xl mx-auto mb-10 bg-white p-8 rounded-2xl shadow-md" action="/ProjetoBlog/filtrar" method="post">
         <div class="flex justify-center itens-center">
@@ -36,15 +35,21 @@
 
             if(!empty($_SESSION['nome']) && $_SESSION['nome'] == $post->usuario){
                 echo "<div class='flex justify-end gap-10 m-5'>
-                        <a class=' bg-red-400 p-2 rounded-xl text-white hover:bg-red-300' href='/ProjetoBlog/deletarPosts?id={$post->id_posts}'>Excluir</a>
                         <a class=' bg-blue-400 p-2 rounded-xl text-white hover:bg-blue-300' href='/ProjetoBlog/alterarPosts?id={$post->id_posts}'>Alterar</a>
+                        <a class=' bg-red-400 p-2 rounded-xl text-white hover:bg-red-300' href='/ProjetoBlog/deletarPosts?id={$post->id_posts}'>Excluir</a>
                       </div>";
             }
 
             echo "
-                    <div class='flex justify-between'>    
-                        <p class='font-bold'>{$post->usuario}</p>
-                        <p>{$dataFormatada}</p>
+                    <div class='flex justify-between'>
+                        <div class='flex items-center justify-around'>
+                            <img class='w-10 h-10 rounded-full' src='{$post->fotoUsuario}'>
+                            <p class='font-bold m-5'>{$post->usuario}</p>
+                        </div>
+
+                        <div class='flex items-center'>
+                            <p>{$dataFormatada}</p>
+                        </div>
                     </div>
 
                     <h2 class='text-green-400 text-3xl font-bold mb-6 text-center m-5'>{$post->titulo}</h2>

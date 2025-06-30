@@ -117,11 +117,14 @@
             $categoriasDAO = new categoriasDAO($this->conexao);
             $categorias = $categoriasDAO->BuscarTodasCategorias();
 
-            $msg = ["","","",""];
+            $msg = ["","","","",""];
             $erro = false;
+            $tiposImagem = ["image/png","image/jpeg"];
 
             //Verificando se recebeu os dados via Post
             if($_POST){
+                $caminhoImagem = $_POST['imagemAtual'];
+
                 if(empty($_POST['titulo'])){
                     $erro = true;
                     $msg[0] = "Preencha o Titulo.";
@@ -138,8 +141,34 @@
                     $erro = true;
                     $msg[3] = "Escolha uma Categoria.";
                 }
+                if($_FILES["imagem"]["name"] != "")
+				{
+					if(!in_array($_FILES["imagem"]["type"], $tiposImagem)){
+					    $msg[3] = "Formato de imagem não suportado";
+					    $erro = true;
+				    }
+				}
 
                 if(!$erro){
+                    if($_FILES['imagem']['name'] != ""){
+                        //Cria um nome unico para a imagem para que não haja conflitos nos nomes
+                        $img = uniqid() . "_" . $_FILES['imagem']['name'];
+                        //Cria o caminho onde a imagem vai ser salva
+                        $caminhoImagem = "src/img/" . $img;
+
+                        //Verifica se foi feito o upload da imagem para o diretorio certo se não ela retorna o erro
+                        if(!move_uploaded_file($_FILES['imagem']['tmp_name'], $caminhoImagem)){
+                            $erro = true;
+                            $msg[4] = "Erro ao salvar a imagem.";
+                        }
+                        
+                        if(unlink($img)) {
+                            echo "Arquivo apagado com sucesso.";
+                        } else {
+                            echo "Erro ao apagar o arquivo.";
+                        }
+                    }
+
                     //Buscando a categoria selecionada por meio do select para inserir no post
                     $categoria = new Categorias(id_categorias: $_POST['categoria']);
 
@@ -150,6 +179,7 @@
                         conteudo:$_POST['conteudo'],
                         datap: date("Y-m-d H:i:s"),
                         categoria:$categoria,
+                        imagem:$caminhoImagem,
                         tags:explode(',', $_POST['tags'])
                     );
 

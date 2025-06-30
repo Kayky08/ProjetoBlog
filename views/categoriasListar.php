@@ -8,7 +8,7 @@
     <table class="min-w-full divide-y bg-white divide-gray-200 border border-green-500">
         <thead>
             <tr class="border border-green-500 bg-green-300">
-                <th class='px-4 py-2 text-center font-semibold text-white'>Codigo</th>
+                <th class='px-4 py-2 text-center font-semibold text-white'>Código</th>
                 <th class='px-4 py-2 text-center font-semibold text-white'>Descritivo</th>
                 <th colspan="2" class='px-4 py-2 text-center font-semibold text-white'>Ações</th>
             </tr>

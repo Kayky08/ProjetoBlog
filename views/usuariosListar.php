@@ -1,9 +1,9 @@
 <?php 
     require_once "layoutCabecalho.php"
 ?>
-    <h1 class="text-center text-3xl mt-5 mb-5 font-bold text-green-400">Lista de Usuarios</h1>
+    <h1 class="text-center text-3xl mt-5 mb-5 font-bold text-green-400">Lista de Usuários</h1>
 
-    <div class="flex justify-center"><a class="text-xl p-3 m-5 text-white bg-green-400 rounded-lg hover:bg-green-300" href="/ProjetoBlog/inserirUsuarios">Criar um Usuario</a></div>
+    <div class="flex justify-center"><a class="text-xl p-3 m-5 text-white bg-green-400 rounded-lg hover:bg-green-300" href="/ProjetoBlog/inserirUsuarios">Criar um Usuário</a></div>
 
     <table class="min-w-full divide-y bg-white divide-gray-200 border border-green-500">
         <thead>
@@ -18,8 +18,9 @@
         </thead>
 
         <tbody>
-            <?php 
+            <?php
             foreach($retorno as $dado){
+                
                 echo "
                     <tr class='text-center'>
                         <td class='px-4 py-2 text-sm text-gray-800'>{$dado->id_usuarios}</td>
@@ -29,11 +30,11 @@
                         <td class='px-4 py-2 text-sm text-gray-800'>{$dado->email}</td>
                 
                         <td class='flex justify-center px-4 py-3 space-x-2'>
-
                 ";
 
                 if($dado->status == 'ativo'){
-                    echo "<a class='px-3 py-1 text-sm text-white bg-blue-400 rounded hover:bg-blue-300' href='/ProjetoBlog/alterarStatus?id={$dado->id_usuarios}'>Bloquear</a>";
+                    echo "
+                        <a class='px-3 py-1 text-sm text-white bg-blue-400 rounded hover:bg-blue-300' href='/ProjetoBlog/alterarStatus?id={$dado->id_usuarios}'>Bloquear</a>";
                 }
                 else{
                     echo "<a class='px-3 py-1 text-sm text-white bg-blue-400 rounded hover:bg-blue-300' href='/ProjetoBlog/alterarStatus?id={$dado->id_usuarios}'>Desbloquear</a>";
